@@ -36,15 +36,18 @@ public class IUTexto {
         System.out.println("  Palavras:");
         System.out.println("  PorFazer");
         System.out.println();
+        System.out.println("Clique no Enter para continuar!");
         System.out.print("> ");
         s.nextLine();
+
+
         jogoMaqEstados.opcoesjogo();
     }
 
     private void iuEscolheJogo()
     {
         int value;
-        String name1 = "", name2 = "";
+        String name1, name2;
 
         System.out.println("1 - Jogador vs Jogador");
         System.out.println("2 - Jogador vs Computador");
@@ -57,29 +60,23 @@ public class IUTexto {
 
         switch(value){
             case 1,2,3 -> {
-                while(!nextState){
-                    System.out.println("Introduza o nome do jogador 1:");
-                    System.out.print("> ");
+                System.out.println("Introduza o nome do jogador 1:");
+                System.out.print("> ");
 
-                    while(!s.hasNext()) s.next();
-                    name1 = s.next();
+                while(!s.hasNext()) s.next();
+                name1 = s.next();
 
-                    System.out.println("Introduza o nome do jogador 2:");
-                    System.out.print("> ");
+                System.out.println("Introduza o nome do jogador 2:");
+                System.out.print("> ");
 
-                    while(!s.hasNext()) s.next();
-                    name2 = s.next();
-                    try {
-                        jogoMaqEstados.iniciar_jogo(value, name1, name2);
-                        nextState = true;
-                    } catch (Exception e){
-                        System.out.println(e.getMessage());
-                    }
-                }
+                while(!s.hasNext()) s.next();
+                name2 = s.next();
+
+                jogoMaqEstados.iniciar_jogo(value, name1, name2);
+                nextState = true;
+
             }
-            default -> {
-                System.out.println("Escolha uma opcao valida!");
-            }
+            default -> System.out.println("Escolha uma opcao valida!");
         }
     }
 
@@ -89,45 +86,38 @@ public class IUTexto {
         jogoMaqEstados.random_jogador();
     }
 
+    private void iuAguardaJogada()
+    {
+        int value;
+
+        System.out.println(jogoMaqEstados.toString());
+
+        System.out.println("Introduza a coluna onde quer jogar:");
+        System.out.print("> ");
+
+
+        while(!s.hasNextInt()) s.next();
+        value=s.nextInt();
+
+        jogoMaqEstados.jogar_peca(value);
+    }
+
     private void iuFinalJogo()
     {
         int value;
-        String name1 = "", name2 = "";
 
-        System.out.println("1 - Jogador vs Jogador");
-        System.out.println("2 - Jogador vs Computador");
-        System.out.println("3 - Computador vs Computador");
+        System.out.println("1-Jogar de novo");
+        System.out.println("2-Sair");
         System.out.print("> ");
 
         while(!s.hasNextInt()) s.next();
 
         value=s.nextInt();
 
-        switch(value){
-            case 1,2,3 -> {
-                while(!nextState){
-                    System.out.println("Introduza o nome do jogador 1:");
-                    System.out.print("> ");
-
-                    while(!s.hasNext()) s.next();
-                    name1 = s.next();
-
-                    System.out.println("Introduza o nome do jogador 2:");
-                    System.out.print("> ");
-
-                    while(!s.hasNext()) s.next();
-                    name2 = s.next();
-                    try {
-                        jogoMaqEstados.iniciar_jogo(value, name1, name2);
-                        nextState = true;
-                    } catch (Exception e){
-                        System.out.println(e.getMessage());
-                    }
-                }
-            }
-            default -> {
-                System.out.println("Escolha uma opcao valida!");
-            }
+        if(value==1){
+            jogoMaqEstados.opcoesjogo();
+        }else if(value == 2){
+            sair = true;
         }
     }
 
@@ -159,7 +149,7 @@ public class IUTexto {
                     iuPrimeiroAJogar();
                     break;
                 case AGUARDA_JOGADA:
-                    //iuAguardaOpcao();
+                    iuAguardaJogada();
                     break;
                 case QUER_MINIJOGO:
                     //iuFinalJogo();
@@ -171,7 +161,7 @@ public class IUTexto {
                     //iuFinalJogo();
                     break;
                 case FIM_JOGO:
-                    //iuFinalJogo();
+                    iuFinalJogo();
                     break;
 
                 default:

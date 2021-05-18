@@ -20,12 +20,8 @@ public class JogoMaqEstados {
         estado = estado.opcoes_jogo();
     }
 
-    public void iniciar_jogo(int tipo, String nome1, String nome2) throws Exception{
-        try {
-            estado = estado.iniciar_jogo(tipo, nome1, nome2);
-        }catch (Exception e){
-            throw new Exception(e.getMessage());
-        }
+    public void iniciar_jogo(int tipo, String nome1, String nome2){
+        estado = estado.iniciar_jogo(tipo, nome1, nome2);
     }
 
     public Situacao getSituacaoAtual(){
@@ -48,5 +44,18 @@ public class JogoMaqEstados {
         estado = estado.jogar_peca(coluna);
     }
 
-    public void
+    public void ganha_minijogo(){
+        estado = estado.ganha_minijogo();
+    }
+
+    public void perde_minijogo(){
+        estado = estado.perde_minijogo();
+    }
+
+
+
+    @Override
+    public String toString() {
+        return jogoDados.toString();
+    }
 }

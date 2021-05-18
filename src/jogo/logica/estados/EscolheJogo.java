@@ -10,12 +10,15 @@ public class EscolheJogo extends EstadoAdapter{
     }
 
     @Override
-    public IEstado iniciar_jogo(int tipo, String nome1, String nome2) throws Exception{
-        try {
-            getJogoDados().inicia(tipo, nome1, nome2);
-        } catch (Exception e){
-            throw new Exception(e.getMessage());
-        }
+    public IEstado iniciar_jogo(int tipo, String nome1, String nome2){
+//        try {
+//            getJogoDados().inicia(tipo, nome1, nome2);
+//        } catch (Exception e){
+//            throw new Exception(e.getMessage());
+//        }
+        if (!getJogoDados().inicia(tipo, nome1, nome2))
+            return this;
+
         return new PrimeiroAJogar(getJogoDados());
     }
 

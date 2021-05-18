@@ -10,21 +10,11 @@ import static jogo.logica.Tipo.*;
 public class JogoDados {
     private static final int nLinhas = 6, nColunas = 7;
     private Tipo tipoJogo;
-    //decorrer do jogo
-    private int nextPlayer; // 1 - player1, 2 - player2
-    //dados player 1 e 2
+    private int nextPlayer;
     private Jogador j1, j2;
-    //tabuleiro
     private int[][] tabuleiro = new int[nLinhas][nColunas];
-    //logs para o main
     private List<String> msgLog = new ArrayList<>();
-    /*   private ArrayList<ArrayList<Integer>> tabuleiro = new ArrayList<>(6);// 6 = numLinhas
 
-    public JogoDados(){
-        for(int i=0; i <= 6; i++){// 7 = numLinhas
-            tabuleiro.add(new ArrayList(7));
-        }
-    }*/
 
     public JogoDados(){
         //inicializacao do tabuleiro a zeros
@@ -35,16 +25,17 @@ public class JogoDados {
         }
     }
 
-    public void inicia(int tipo, String nome1, String nome2) throws Exception{
+    public boolean inicia(int tipo, String nome1, String nome2){
         if (nome1.replace(" ","").equalsIgnoreCase(nome2.replace(" ",""))){
-            //addMsgLog("Nomes dos jogadores nao podem ser iguais!");
-            throw new Exception("O nome dos jogadores nao podem ser iguais!");
+            addMsgLog("O nome dos jogadores nao podem ser iguais!\n");
+            return false;
         }
         if (nome1.equals("") || nome2.equals("")){
-            //addMsgLog("Nomes nao podem ser vazios!");
-            throw new Exception("Os nomes dos jogadores nao podem ser vazios!");
+            addMsgLog("Os nomes dos jogadores nao podem ser vazios!\n");
+            return false;
         }
         setTipoJogo(tipo, nome1, nome2);
+        return true;
     }
 
     public String getPlayers(){
@@ -125,14 +116,37 @@ public class JogoDados {
 
     public boolean apos4jogadas() {
 
-        switch(tipoJogo){
-            case PlayerVsPlayer:
-                return true;
-            case PlayerVsComputer:
-                return true; // ainda nao esta totalmente correto
-            case ComputerVsComputer:
-                return false;
+        return switch (tipoJogo) {
+            case PlayerVsPlayer -> true;
+            // ainda nao esta totalmente correto
+            case PlayerVsComputer -> true;
+            case ComputerVsComputer -> false;
+        };
+    }
+
+    public boolean joga(int coluna) {
+    //versao muito simples e incompleta
+        for(int i = nLinhas - 1; i >= 0; --i){
+            if(tabuleiro[i][coluna-1] == 0){
+                tabuleiro[i][coluna-1] = 1;
+                addMsgLog("aposta com sucesso!\n");
+            }
         }
+        return false;
+    }
+
+    public boolean validaJogada(int coluna){
+        if (coluna > 7 || coluna < 1) {
+            addMsgLog("Coluna Invalida\n");
+            return false;
+        }
+
+        for(int i = nLinhas - 1; i >= 0; --i){
+            if(tabuleiro[i][coluna-1] == 0){
+                return true;
+            }
+        }
+        addMsgLog("Coluna cheia!\n");
         return false;
     }
 }

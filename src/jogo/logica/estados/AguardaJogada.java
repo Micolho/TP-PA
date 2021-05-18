@@ -11,7 +11,11 @@ public class AguardaJogada extends EstadoAdapter{
 
     @Override
     public IEstado jogar_peca(int coluna) {
-        return super.jogar_peca(coluna);
+        if(!getJogoDados().validaJogada(coluna))
+            return this;
+
+        getJogoDados().joga(coluna);
+        return this;
     }
 
     @Override

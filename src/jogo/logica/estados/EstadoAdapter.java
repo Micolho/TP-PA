@@ -16,7 +16,7 @@ public abstract class EstadoAdapter implements IEstado {
         return this;
     }
     @Override
-    public IEstado iniciar_jogo(int tipo, String nome1, String nome2) throws Exception{
+    public IEstado iniciar_jogo(int tipo, String nome1, String nome2){
         return this;
     }
     @Override
