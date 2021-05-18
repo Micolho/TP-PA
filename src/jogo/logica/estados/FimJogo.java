@@ -9,11 +9,8 @@ public class FimJogo extends EstadoAdapter{
     }
 
     @Override
-    public IEstado iniciar_jogo(int tipo, String nome1, String nome2){
-        if (getJogoDados().inicia(tipo, nome1, nome2))
-            return this;
-
-        return new PrimeiroAJogar(getJogoDados());
+    public IEstado opcoes_jogo(){
+        return new EscolheJogo(getJogoDados());
     }
 
     public Situacao getSituacaoAtual(){
