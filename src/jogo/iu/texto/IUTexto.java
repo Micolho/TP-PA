@@ -54,15 +54,55 @@ public class IUTexto {
             default -> {
                 System.out.println("Escolha uma opcao valida!");
             }
-
         }
-
     }
 
     private void iuPrimeiroAJogar()
     {
         System.out.println("\nVai ser executada a escolhar do primeiro jogador: \n");
         jogoMaqEstados.random_jogador();
+    }
+
+    private void iuFinalJogo()
+    {
+        int value;
+        String name1 = "", name2 = "";
+
+        System.out.println("1 - Jogador vs Jogador");
+        System.out.println("2 - Jogador vs Computador");
+        System.out.println("3 - Computador vs Computador");
+        System.out.print("> ");
+
+        while(!s.hasNextInt()) s.next();
+
+        value=s.nextInt();
+
+        switch(value){
+            case 1,2,3 -> {
+                while(!nextState){
+                    System.out.println("Introduza o nome do jogador 1:");
+                    System.out.print("> ");
+
+                    while(!s.hasNext()) s.next();
+                    name1 = s.next();
+
+                    System.out.println("Introduza o nome do jogador 2:");
+                    System.out.print("> ");
+
+                    while(!s.hasNext()) s.next();
+                    name2 = s.next();
+                    try {
+                        jogoMaqEstados.iniciar_jogo(value, name1, name2);
+                        nextState = true;
+                    } catch (Exception e){
+                        System.out.println(e.getMessage());
+                    }
+                }
+            }
+            default -> {
+                System.out.println("Escolha uma opcao valida!");
+            }
+        }
     }
 
     public void corre(){
