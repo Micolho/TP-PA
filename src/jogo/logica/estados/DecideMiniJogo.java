@@ -9,9 +9,9 @@ public class DecideMiniJogo extends EstadoAdapter{
         super(jogoDados);
     }
 
-    public IEstado apos4jogadas(int escolha) {
+    public IEstado apos4jogadas() {
         //por fazer
-        if(getJogoDados().apos4jogadas(escolha)){
+        if(getJogoDados().apos4jogadas()){
             return new MiniJogo(getJogoDados());
         }else{
             return new AguardaJogada(getJogoDados());

@@ -15,6 +15,32 @@ public class IUTexto {
         jogoMaqEstados = game;
     }
 
+    private void iuMenuInformativo() {
+        System.out.println();
+        System.out.println("  Jogo do 4 em linha");
+        System.out.println();
+        System.out.println("  Objetivo:");
+        System.out.println("  Colocar 4 peças em linha na horizontal, vertical ou diagonal.");
+        System.out.println();
+        System.out.println("  Regras:");
+        System.out.println("  Apenas se pode jogar 1 peça por jogada.");
+        System.out.println("  O primeiro jogador a começar é selecionado de forma aleatória.");
+        System.out.println("  A cada 4 jogadas, o jogador tem a opcao de aceitar participar num mini jogo" +
+                "para obter uma peça especial caso ganhe.");
+        System.out.println();
+        System.out.println("  Mini Jogos:");
+        System.out.println();
+        System.out.println("  Contas:");
+        System.out.println("  PorFazer");
+        System.out.println();
+        System.out.println("  Palavras:");
+        System.out.println("  PorFazer");
+        System.out.println();
+        System.out.print("> ");
+        s.nextLine();
+        jogoMaqEstados.opcoesjogo();
+    }
+
     private void iuEscolheJogo()
     {
         int value;
@@ -123,25 +149,28 @@ public class IUTexto {
             Situacao situacao = jogoMaqEstados.getSituacaoAtual();
 
             switch (situacao) {
+                case MENU_INFORMATIVO:
+                    iuMenuInformativo();
+                    break;
                 case ESCOLHE_JOGO:
                     iuEscolheJogo();
                     break;
-                case  PRIMEIRO_A_JOGAR:
+                case PRIMEIRO_A_JOGAR:
                     iuPrimeiroAJogar();
                     break;
-                case  AGUARDA_JOGADA:
+                case AGUARDA_JOGADA:
                     //iuAguardaOpcao();
                     break;
-                case  QUER_MINIJOGO:
+                case QUER_MINIJOGO:
                     //iuFinalJogo();
                     break;
-                case  MINIJOGO:
+                case MINIJOGO:
                     //iuFinalJogo();
                     break;
-                case  DECISAO_PECA_ESPECIAL:
+                case DECISAO_PECA_ESPECIAL:
                     //iuFinalJogo();
                     break;
-                case  FIM_JOGO:
+                case FIM_JOGO:
                     //iuFinalJogo();
                     break;
 
@@ -156,4 +185,6 @@ public class IUTexto {
         System.out.println(jogoMaqEstados);
 
     }
+
+
 }

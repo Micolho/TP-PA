@@ -1,11 +1,15 @@
 package jogo.logica.dados;
 
+import jogo.logica.Tipo;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import static jogo.logica.Tipo.*;
+
 public class JogoDados {
     private static final int nLinhas = 6, nColunas = 7;
-
+    private Tipo tipoJogo;
     //decorrer do jogo
     private int nextPlayer; // 1 - player1, 2 - player2
     //dados player 1 e 2
@@ -64,14 +68,17 @@ public class JogoDados {
         // 3 - computer vs computer
         switch (tipo) { //suggest do intelij switch enhanced
             case 1 -> {
+                this.tipoJogo = PlayerVsPlayer;
                 this.j1 = new JogadorHumano(nome1);
                 this.j2 = new JogadorHumano(nome2);
             }
             case 2 -> {
+                this.tipoJogo = PlayerVsComputer;
                 this.j1 = new JogadorHumano(nome1);
                 this.j2 = new JogadorVirtual(nome2);
             }
             case 3 -> {
+                this.tipoJogo = ComputerVsComputer;
                 this.j1 = new JogadorVirtual(nome1);
                 this.j2 = new JogadorVirtual(nome2);
             }
@@ -114,5 +121,18 @@ public class JogoDados {
             }
         }
         return s.toString();
+    }
+
+    public boolean apos4jogadas() {
+
+        switch(tipoJogo){
+            case PlayerVsPlayer:
+                return true;
+            case PlayerVsComputer:
+                return true; // ainda nao esta totalmente correto
+            case ComputerVsComputer:
+                return false;
+        }
+        return false;
     }
 }

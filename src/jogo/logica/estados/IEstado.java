@@ -5,6 +5,7 @@ import jogo.logica.Situacao;
 
 public interface IEstado {
 
+    IEstado opcoes_jogo();
     IEstado iniciar_jogo(int tipo, String nome1, String nome2) throws Exception;
     IEstado terminar();
     IEstado jogar_peca(int coluna);

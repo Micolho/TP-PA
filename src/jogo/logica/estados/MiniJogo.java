@@ -9,7 +9,15 @@ public class MiniJogo extends EstadoAdapter{
         super(jogoDados);
     }
 
+    public IEstado ganha_minijogo(){
+        //falta coisas aqui
+        return new DecisaoPecaEspecial(getJogoDados());
+    }
 
+    public IEstado perde_minijogo(){
+        //falta coisas aqui
+        return new AguardaJogada(getJogoDados());
+    }
 
     public Situacao getSituacaoAtual(){
         return Situacao.MINIJOGO;

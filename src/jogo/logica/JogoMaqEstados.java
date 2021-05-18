@@ -3,6 +3,7 @@ package jogo.logica;
 import jogo.logica.dados.JogoDados;
 import jogo.logica.estados.EscolheJogo;
 import jogo.logica.estados.IEstado;
+import jogo.logica.estados.MenuInformativo;
 
 import java.util.List;
 
@@ -12,7 +13,11 @@ public class JogoMaqEstados {
 
     public JogoMaqEstados(){
         jogoDados = new JogoDados();
-        estado = new EscolheJogo(jogoDados);
+        estado = new MenuInformativo(jogoDados);
+    }
+
+    public void opcoesjogo(){
+        estado = estado.opcoes_jogo();
     }
 
     public void iniciar_jogo(int tipo, String nome1, String nome2) throws Exception{
@@ -43,4 +48,5 @@ public class JogoMaqEstados {
         estado = estado.jogar_peca(coluna);
     }
 
+    public void
 }
