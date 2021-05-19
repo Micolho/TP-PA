@@ -3,10 +3,12 @@ package jogo.logica.dados;
 public class JogadorVirtual extends Jogador{
     private String nome;
     private int nJogadas;
+    private int id;
 
     public JogadorVirtual(String nome){
         this.nJogadas = 0;
         setNome(nome);
+        id = count++;
     }
 
     public void setNome(String nome){
@@ -36,26 +38,24 @@ public class JogadorVirtual extends Jogador{
 
     public boolean joga(JogoDados jogoDados){
         boolean sair = false;
-        int random, colunaAJogar = 0;
+        int random;
         while(!sair) {
-             random = (int) (Math.random() * 6);
+             random = (int) (Math.random() * 7);
              if(jogoDados.validaJogada(random)){
-                 colunaAJogar = random;
-                 jogoDados.registaTabuleiro(random);
+                 jogoDados.registaTabuleiro(random, id);
                  sair = true;
              }
         }
 
-
+        addJogada();
         return false;
     }
 
     public void setPosAJogar(int posAJogar){
-
     }
 
     @Override
     public String toString(){
-        return "\nNome do jogador: " + nome + "\n";
+        return "\nNome do jogador: " + nome + " id: " + id +"\n";
     }
 }

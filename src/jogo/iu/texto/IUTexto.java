@@ -86,11 +86,12 @@ public class IUTexto {
         jogoMaqEstados.random_jogador();
     }
 
-    private void iuAguardaJogada()
+    private void iuAguardaJogadaHumana()
     {
         int value;
 
-        System.out.println(jogoMaqEstados.toString());
+
+        //System.out.println(jogoMaqEstados.toString());
 
         System.out.println("Introduza a coluna onde quer  ou -1 se deseja sair do jogo:");
         System.out.print("> ");
@@ -102,6 +103,24 @@ public class IUTexto {
             jogoMaqEstados.terminar();
         else
             jogoMaqEstados.jogar_peca(value);
+    }
+
+    private void iuAguardaJogadaVirtual()
+    {
+
+        //System.out.println(jogoMaqEstados.toString());
+
+//        System.out.println("Introduza a coluna onde quer  ou -1 se deseja sair do jogo:");
+//        System.out.print("> ");
+//
+//        while(!s.hasNextInt()) s.next();
+//        value=s.nextInt();
+//
+//        if (value == -1)
+//            jogoMaqEstados.terminar();
+//        else
+        jogoMaqEstados.jogar_peca(0); // 0 porque vai ser ignorado este valor
+                                            // a coluna a jogar vai ser escolhida pelo computador
     }
 
     private void iuFinalJogo()
@@ -150,8 +169,11 @@ public class IUTexto {
                 case PRIMEIRO_A_JOGAR:
                     iuPrimeiroAJogar();
                     break;
-                case AGUARDA_JOGADA:
-                    iuAguardaJogada();
+                case AGUARDA_JOGADA_HUMANA:
+                    iuAguardaJogadaHumana();
+                    break;
+                case AGUARDA_JOGADA_VIRTUAL:
+                    iuAguardaJogadaVirtual();
                     break;
                 case QUER_MINIJOGO:
                     //iuFinalJogo();

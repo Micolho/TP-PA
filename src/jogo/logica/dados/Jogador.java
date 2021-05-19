@@ -1,6 +1,7 @@
 package jogo.logica.dados;
 
 public abstract class Jogador {
+    protected static int count = 1;
 
     public abstract void setNome(String nome);
     public abstract String getNome();

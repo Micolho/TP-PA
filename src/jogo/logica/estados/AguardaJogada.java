@@ -11,12 +11,20 @@ public class AguardaJogada extends EstadoAdapter{
 
     @Override
     public IEstado jogar_peca(int coluna) {
-        if(!getJogoDados().validaJogada(coluna))
+        int ret;
+
+        if(!getJogoDados().validaJogada(coluna) && getJogoDados().precisaInput())
             return this;
 
-        if(getJogoDados().joga(coluna)){
-            return
+        ret = getJogoDados().joga(coluna);
+
+        switch(ret){
+            case 1,2:
+                return new FimJogo(getJogoDados());
+            case 0:
+                return this;
         }
+
         return this;
     }
 
@@ -27,7 +35,8 @@ public class AguardaJogada extends EstadoAdapter{
 
     @Override
     public Situacao getSituacaoAtual() {
-        //if (getJogoDados())
-        return Situacao.AGUARDA_JOGADA;
+        if (getJogoDados().precisaInput())
+            return Situacao.AGUARDA_JOGADA_HUMANA;
+        return Situacao.AGUARDA_JOGADA_VIRTUAL;
     }
 }

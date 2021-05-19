@@ -1,17 +1,26 @@
 package jogo.logica.dados;
 
 public class JogadorHumano extends Jogador{
+
     private String nome;
     private int nJogadas;
     private boolean pecaEspecial; // se tem ou nao guardada
     private String lastMiniGame;
     private int posAJogar;
+    private int id;
+
+
 
     public JogadorHumano(String nome){
         setNome(nome);
         this.nJogadas = 0;
         pecaEspecial = false;
         lastMiniGame = "";
+        id=count++;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public void setNome(String nome){
@@ -44,7 +53,7 @@ public class JogadorHumano extends Jogador{
     }
 
     public boolean joga(JogoDados jogoDados){
-        jogoDados.registaTabuleiro(posAJogar);
+        jogoDados.registaTabuleiro(posAJogar, id);
         addJogada();
         return false;
     }
@@ -58,8 +67,7 @@ public class JogadorHumano extends Jogador{
     }
 
     @Override
-    public String toString(){
-        return "\nNome do jogador: " + nome + "\n";
+    public String toString() {
+        return "\nNome do jogador: " + nome + " id: " + id + "\n";
     }
-
 }
