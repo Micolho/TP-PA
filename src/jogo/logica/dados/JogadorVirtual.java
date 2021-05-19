@@ -41,6 +41,7 @@ public class JogadorVirtual extends Jogador{
              random = (int) (Math.random() * 6);
              if(jogoDados.validaJogada(random)){
                  colunaAJogar = random;
+                 jogoDados.registaTabuleiro(random);
                  sair = true;
              }
         }

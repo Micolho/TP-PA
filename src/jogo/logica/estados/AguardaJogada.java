@@ -14,7 +14,9 @@ public class AguardaJogada extends EstadoAdapter{
         if(!getJogoDados().validaJogada(coluna))
             return this;
 
-        getJogoDados().joga(coluna);
+        if(getJogoDados().joga(coluna)){
+            return
+        }
         return this;
     }
 
@@ -25,6 +27,7 @@ public class AguardaJogada extends EstadoAdapter{
 
     @Override
     public Situacao getSituacaoAtual() {
+        //if (getJogoDados())
         return Situacao.AGUARDA_JOGADA;
     }
 }
