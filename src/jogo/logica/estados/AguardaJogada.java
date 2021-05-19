@@ -19,6 +19,11 @@ public class AguardaJogada extends EstadoAdapter{
     }
 
     @Override
+    public IEstado terminar() {
+        return new FimJogo(getJogoDados());
+    }
+
+    @Override
     public Situacao getSituacaoAtual() {
         return Situacao.AGUARDA_JOGADA;
     }

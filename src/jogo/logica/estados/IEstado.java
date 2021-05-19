@@ -18,8 +18,6 @@ public interface IEstado {
     IEstado perde_minijogo();
     IEstado guarda_peca_especial();
     IEstado joga_peca_especial();
-
     Situacao getSituacaoAtual();
-
 
 }

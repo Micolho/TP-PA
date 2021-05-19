@@ -10,7 +10,7 @@ import static jogo.logica.Tipo.*;
 public class JogoDados {
     private static final int nLinhas = 6, nColunas = 7;
     private Tipo tipoJogo;
-    private int nextPlayer;
+    private Jogador nextPlayer;
     private Jogador j1, j2;
     private int[][] tabuleiro = new int[nLinhas][nColunas];
     private List<String> msgLog = new ArrayList<>();
@@ -47,9 +47,11 @@ public class JogoDados {
         //switch((Math.random() <= 0.5) ? 1 : 2){ //valores gerados sao 1 ou 2, ambos com chance de 50% pra ser justo
         if (((int) ( Math.random() * 2 + 1)) == 1) { //ganhou o sorteio
             addMsgLog("O Jogador " + j1.getNome() + " ganhou o sorteio do primeiro a jogar!");
+            nextPlayer = j1;
         } else {
-            nextPlayer = 2;// Player 1 ganhou o sorteio
+            nextPlayer = j2;
             addMsgLog("O Jogador " + j2.getNome() + " ganhou o sorteio do primeiro a jogar!");
+
         }
     }
 
@@ -93,9 +95,9 @@ public class JogoDados {
     public String toString() {
         StringBuilder s = new StringBuilder(); // mais eficas que concatenar strings
         s.append("\nTabuleiro: \n\n");
-        for(int i = 0; i <= nColunas; i++){
+        for(int i = 0; i < nColunas; i++){
             if (i == 0 ){
-                s.append(" | ");
+                s.append(" | ").append(i).append(" | ");
                 continue;
             }
             s.append(i).append(" | ");
@@ -124,29 +126,86 @@ public class JogoDados {
         };
     }
 
-    public boolean joga(int coluna) {
+    public boolean registaTabuleiro(int coluna) {
     //versao muito simples e incompleta
+
         for(int i = nLinhas - 1; i >= 0; --i){
-            if(tabuleiro[i][coluna-1] == 0){
-                tabuleiro[i][coluna-1] = 1;
+            if(tabuleiro[i][coluna] == 0){
+                tabuleiro[i][coluna] = 1;
                 addMsgLog("aposta com sucesso!\n");
+                return true;
             }
         }
         return false;
     }
 
+    public boolean joga(int coluna){
+        boolean verifica = false;
+
+        //verifica o jogador a jogar
+        if(nextPlayer.equals(j1)){
+            j1.setPosAJogar(coluna);
+            verifica = j1.joga(this);
+        }else if(nextPlayer.equals(j2)){
+            verifica = j2.joga(this);
+        }
+
+        return verifica;
+    }
+
     public boolean validaJogada(int coluna){
-        if (coluna > 7 || coluna < 1) {
+
+        if (coluna > 6 || coluna < 0) {
             addMsgLog("Coluna Invalida\n");
             return false;
         }
 
-        for(int i = nLinhas - 1; i >= 0; --i){
-            if(tabuleiro[i][coluna-1] == 0){
+        for(int i = nLinhas-1; i >= 0; --i){
+            if(tabuleiro[i][coluna] == 0){
                 return true;
             }
         }
         addMsgLog("Coluna cheia!\n");
         return false;
     }
+
+    public int verifica4EmLinha(){
+        for(int l = 0; l < nLinhas; l++){//linhas
+            for(int c = 0; c < nColunas; c++) {//colunas
+                int jogadorVencedor = tabuleiro[l][c];
+
+                if (jogadorVencedor == 0) {
+                    continue; // evitar verificar linhas onde ainda ninguem jogou
+                }
+                if (c + 3 < nColunas && // verificar vencedor numa coluna
+                        jogadorVencedor == tabuleiro[l][c + 1] &&
+                        jogadorVencedor == tabuleiro[l][c + 2] &&
+                        jogadorVencedor == tabuleiro[l][c + 3])
+                    return jogadorVencedor;
+                if (l + 3 < nLinhas){
+
+                    if (c + 3 < nColunas && //verificar vencedor numa linha
+                            jogadorVencedor == tabuleiro[l + 1][c] &&
+                            jogadorVencedor == tabuleiro[l + 2][c] &&
+                            jogadorVencedor == tabuleiro[l + 3][c])
+                        return jogadorVencedor;
+
+                    if (c + 3 < nColunas && // verificar vencedor numa diagonal ex: x
+                            jogadorVencedor == tabuleiro[l+1][c+1] &&//              x
+                            jogadorVencedor == tabuleiro[l+1][c+2] &&//               x
+                            jogadorVencedor == tabuleiro[l+1][c+3])//                  x
+                        return jogadorVencedor;
+
+                    if (c - 3 >= 0 && // verificar vencedor numa diagonal ex: x
+                            jogadorVencedor == tabuleiro[l+1][c-1] &&//      x
+                            jogadorVencedor == tabuleiro[l+2][c-2] &&//     x
+                            jogadorVencedor == tabuleiro[l+3][c-3])//      x
+                        return jogadorVencedor;
+                }
+            }
+        }
+        return 0;//sem vencedor
+    }
+
+
 }

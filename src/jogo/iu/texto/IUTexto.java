@@ -82,7 +82,7 @@ public class IUTexto {
 
     private void iuPrimeiroAJogar()
     {
-        System.out.println("\nVai ser executada a escolhar do primeiro jogador: \n");
+        System.out.println("\nVai ser executada a escolha do primeiro jogador: \n");
         jogoMaqEstados.random_jogador();
     }
 
@@ -92,14 +92,16 @@ public class IUTexto {
 
         System.out.println(jogoMaqEstados.toString());
 
-        System.out.println("Introduza a coluna onde quer jogar:");
+        System.out.println("Introduza a coluna onde quer  ou -1 se deseja sair do jogo:");
         System.out.print("> ");
-
 
         while(!s.hasNextInt()) s.next();
         value=s.nextInt();
 
-        jogoMaqEstados.jogar_peca(value);
+        if (value == -1)
+            jogoMaqEstados.terminar();
+        else
+            jogoMaqEstados.jogar_peca(value);
     }
 
     private void iuFinalJogo()
@@ -171,9 +173,8 @@ public class IUTexto {
         }
 
         System.out.println();
-        System.out.println("************** Final Jogo *****************");
-        System.out.println(jogoMaqEstados);
-
+        System.out.println("************** Fim do Jogo *****************");
+        //System.out.println(jogoMaqEstados);
     }
 
 

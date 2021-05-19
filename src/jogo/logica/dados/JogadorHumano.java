@@ -5,6 +5,7 @@ public class JogadorHumano extends Jogador{
     private int nJogadas;
     private boolean pecaEspecial; // se tem ou nao guardada
     private String lastMiniGame;
+    private int posAJogar;
 
     public JogadorHumano(String nome){
         setNome(nome);
@@ -40,6 +41,20 @@ public class JogadorHumano extends Jogador{
     }
     public void setLastMiniGame(String minigame){
         lastMiniGame = minigame;
+    }
+
+    public boolean joga(JogoDados jogoDados){
+        jogoDados.registaTabuleiro(posAJogar);
+        addJogada();
+        return false;
+    }
+
+    public int getPosAJogar() {
+        return posAJogar;
+    }
+
+    public void setPosAJogar(int posAJogar) {
+        this.posAJogar = posAJogar;
     }
 
     @Override

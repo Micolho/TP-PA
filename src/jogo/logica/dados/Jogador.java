@@ -12,4 +12,6 @@ public abstract class Jogador {
     public abstract void setLastMiniGame(String minigame);
     @Override
     public abstract String toString();
+    public abstract boolean joga(JogoDados jogoDados);
+    public abstract void setPosAJogar(int posAJogar);
 }

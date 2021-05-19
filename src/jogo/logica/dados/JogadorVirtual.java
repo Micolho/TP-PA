@@ -34,6 +34,25 @@ public class JogadorVirtual extends Jogador{
     public void setLastMiniGame(String minigame) {
     }
 
+    public boolean joga(JogoDados jogoDados){
+        boolean sair = false;
+        int random, colunaAJogar = 0;
+        while(!sair) {
+             random = (int) (Math.random() * 6);
+             if(jogoDados.validaJogada(random)){
+                 colunaAJogar = random;
+                 sair = true;
+             }
+        }
+
+
+        return false;
+    }
+
+    public void setPosAJogar(int posAJogar){
+
+    }
+
     @Override
     public String toString(){
         return "\nNome do jogador: " + nome + "\n";

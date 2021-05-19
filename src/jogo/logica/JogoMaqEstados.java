@@ -52,6 +52,10 @@ public class JogoMaqEstados {
         estado = estado.perde_minijogo();
     }
 
+    public void terminar(){
+        estado = estado.terminar();
+    }
+
 
 
     @Override
