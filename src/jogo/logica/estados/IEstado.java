@@ -10,14 +10,12 @@ public interface IEstado {
     IEstado terminar();
     IEstado jogar_peca(int coluna);
     IEstado random_jogador();
-    IEstado apos4jogadas();
-    IEstado aguarda_opcao();
     IEstado aceita_minijogo();
     IEstado recusa_minijogo();
-    IEstado ganha_minijogo();
-    IEstado perde_minijogo();
+    IEstado joga_minijogo_contas(int n);
+    IEstado joga_minijogo_palavras(String palavra);
     IEstado guarda_peca_especial();
-    IEstado joga_peca_especial();
+    IEstado joga_peca_especial(int coluna);
     Situacao getSituacaoAtual();
 
 }

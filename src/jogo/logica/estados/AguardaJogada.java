@@ -11,18 +11,17 @@ public class AguardaJogada extends EstadoAdapter{
 
     @Override
     public IEstado jogar_peca(int coluna) {
-        int ret;
+        //int ret;
 
-        if(!getJogoDados().validaJogada(coluna) && getJogoDados().precisaInput())
+        if(!getJogoDados().validaJogada(coluna) && getJogoDados().isHumano())
             return this;
 
-        ret = getJogoDados().joga(coluna);
+        //ret = getJogoDados().joga(coluna);
+        if (getJogoDados().apos4jogadas())
+            return new DecideMiniJogo(getJogoDados());
 
-        switch(ret){
-            case 1,2:
-                return new FimJogo(getJogoDados());
-            case 0:
-                return this;
+        if(getJogoDados().joga(coluna)){
+            return new FimJogo(getJogoDados());
         }
 
         return this;
@@ -35,7 +34,8 @@ public class AguardaJogada extends EstadoAdapter{
 
     @Override
     public Situacao getSituacaoAtual() {
-        if (getJogoDados().precisaInput())
+        if (getJogoDados().isHumano() &&
+                !getJogoDados().apos4jogadas())
             return Situacao.AGUARDA_JOGADA_HUMANA;
         return Situacao.AGUARDA_JOGADA_VIRTUAL;
     }

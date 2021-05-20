@@ -14,10 +14,12 @@ public class JogoDados {
     private Jogador j1, j2;
     private int[][] tabuleiro = new int[nLinhas][nColunas];
     private List<String> msgLog = new ArrayList<>();
+    private MiniJogo miniJogo;
 
 
     public JogoDados(){
         setTabuleiroZeros();
+        miniJogo = null;
     }
 
     public void setTabuleiroZeros(){
@@ -57,7 +59,7 @@ public class JogoDados {
             addMsgLog("O Jogador " + j2.getNome() + " ganhou o sorteio do primeiro a jogar!");
 
         }
-
+        addMsgLog("############## JOGADOR "+ nextPlayer.getNome()+" ###################");
         addMsgLog(this.toString());//imprimir o tabuleiro
     }
 
@@ -130,45 +132,36 @@ public class JogoDados {
     }
 
     public boolean apos4jogadas() {
-
-        return switch (tipoJogo) {
-            case PlayerVsPlayer -> true;
-            // ainda nao esta totalmente correto
-            case PlayerVsComputer -> true;
-            case ComputerVsComputer -> false;
-        };
+        return  nextPlayer.getJogadas() != 0 &&
+                nextPlayer.getJogadas() % 4 == 0 &&
+                isHumano() &&
+                !getRecusouMiniGame() &&
+                !nextPlayer.jaJogouMiniJogo(); //para o estado DecideMiniJogo
     }
 
-    public boolean registaTabuleiro(int coluna, int idJogador) {
+    public void registaTabuleiro(int coluna, int idJogador) {
     //versao muito simples e incompleta
 
         for(int i = nLinhas - 1; i >= 0; --i){
             if(tabuleiro[i][coluna] == 0){
                 tabuleiro[i][coluna] = idJogador;
                 //addMsgLog("aposta com sucesso!\n");
-                return true;
+                break;
             }
         }
-        return false;
+        //return false;
     }
 
-    public int joga(int coluna){
+    public boolean joga(int coluna){
 
-        addMsgLog("############## JOGADOR "+ nextPlayer.getNome()+" ###################");
-
-        int value;
-        //verifica o jogador a jogar NAO E VERSAL FINAL ALTERAR
-        //System.out.println(nextPlayer.getNome() + " " + precisaInput() + " " + nextPlayer.toString());
-        //registaTabuleiro(coluna);
-
-        if(nextPlayer.equals(j1)){
-            if(precisaInput())//verifica se jogador instanceof JogadorHumano
+        if(nextPlayer.getNome().equals(j1.getNome())){
+            if(isHumano()) //verifica se jogador instanceof JogadorHumano
                 j1.setPosAJogar(coluna);
 
             j1.joga(this);
             nextPlayer = j2;
-        }else if(nextPlayer.equals(j2)){
-            if(precisaInput())//verifica se jogador instanceof JogadorHumano
+        }else if(nextPlayer.getNome().equals(j2.getNome())){
+            if(isHumano())//verifica se jogador instanceof JogadorHumano
                 j2.setPosAJogar(coluna);
             j2.joga(this);
             nextPlayer = j1;
@@ -176,12 +169,7 @@ public class JogoDados {
         }
         addMsgLog(this.toString());//imprimir o tabuleiro
 
-        value = verifica4EmLinha();
-        value = verificaVencedor(value); // verifica se ha vencedores, e se houver
-                                                    // devolve 1 se ha vencedor // 0 se nao
-                                                    // regista no msglog e envia true pra terminar o jogo
-        addMsgLog("VALUE:" + value + "\n");
-        return value;
+        return verificaVencedor(verifica4EmLinha());
     }
 
     public boolean validaJogada(int coluna){
@@ -197,33 +185,33 @@ public class JogoDados {
             }
         }
 
-        //addMsgLog("$$$$$$$$$$$$$$$$$$$Coluna cheia!\n");
-        ///addMsgLog(this.toString() + "\ncoluna " + coluna);
+        if(isHumano())
+            addMsgLog("Coluna cheia!\n");
         return false;
     }
 
-    public int verificaVencedor(int jogadorVencedor){
+    public boolean verificaVencedor(int jogadorVencedor){
 
         if(isTabuleiroCheio() && jogadorVencedor == 0){
             addMsgLog("Tabuleiro cheio e sem vencedores");
             addMsgLog(this.toString());//imprimir o tabuleiro
-            return 2; //fim de jogo tabuleiro cheio sem vencedores
+            return true; //fim de jogo tabuleiro cheio sem vencedores
         }
 
         if (jogadorVencedor == 0){
             //addMsgLog("Sem vencedores ainda\n");
-            return 0;
+            addMsgLog("############## JOGADOR "+ nextPlayer.getNome()+" ###################");
+            return false;
         }
 
         if (jogadorVencedor % 2 == 0){ //se for par e o jogador 2
             addMsgLog(j2.getNome() + " vencedor\n");
             //addMsgLog(this.toString());//imprimir o tabuleiro
-            return 1;
         }else { // se nao for par, logo impar e o jogador 1
             addMsgLog(j1.getNome() + " vencedor\n");
             //addMsgLog(this.toString());//imprimir o tabuleiro
-            return 1;
         }
+        return true;
     }
 
     public int verifica4EmLinha(){
@@ -255,20 +243,20 @@ public class JogoDados {
                                 " l:"+ (l+3) + " c:"  +(c));
                         return jogadorVencedor;
                     }
-                    if (c + 3 < nColunas && // verificar vencedor numa diagonal ex: x sentido cima direita
-                            jogadorVencedor == tabuleiro[l+1][c+1] &&//            x
-                            jogadorVencedor == tabuleiro[l+1][c+2] &&//           x
-                            jogadorVencedor == tabuleiro[l+1][c+3]) {//            x
+                    if (c + 3 < nColunas && // verificar vencedor numa diagonal ex: x -> aspecto visual na consola
+                            jogadorVencedor == tabuleiro[l+1][c+1] &&//              x
+                            jogadorVencedor == tabuleiro[l+2][c+2] &&//               x
+                            jogadorVencedor == tabuleiro[l+3][c+3]) {//                x
                         addMsgLog(" l:"+ l + " c:"+c +
                                 " l:"+ (l+1) + " c:" +(c+1)+
                                 " l:"+ (l+2) + " c:" +(c+2)+
                                 " l:"+ (l+3) + " c:"  +(c+3));
                         return jogadorVencedor;
                     }
-                    if (c - 3 >= 0 && // verificar vencedor numa diagonal ex: x   sentido cima esquerda
-                            jogadorVencedor == tabuleiro[l+1][c-1] &&//        x
-                            jogadorVencedor == tabuleiro[l+2][c-2] &&//         x
-                            jogadorVencedor == tabuleiro[l+3][c-3]) {//            x
+                    if (c - 3 >= 0 && // verificar vencedor numa diagonal ex: x -> aspecto visual na consola
+                            jogadorVencedor == tabuleiro[l+1][c-1] &&//      x
+                            jogadorVencedor == tabuleiro[l+2][c-2] &&//     x
+                            jogadorVencedor == tabuleiro[l+3][c-3]) {//    x
                         addMsgLog(" l:"+ l + " c:"+c +
                                 " l:"+ (l+1) + " c:" +(c-1)+
                                 " l:"+ (l+2) + " c:" +(c-2)+
@@ -281,7 +269,7 @@ public class JogoDados {
         return 0;//sem vencedor
     }
 
-    public boolean precisaInput(){
+    public boolean isHumano(){
         return nextPlayer instanceof JogadorHumano;
     }
 
@@ -293,5 +281,98 @@ public class JogoDados {
             }
         }
         return true;
+    }
+
+    public void recusaMiniGame() {
+        if (nextPlayer.getNome().equals(j1.getNome())){
+            j1.setRecusaMiniGame(true);
+        }else if (nextPlayer.getNome().equals(j2.getNome())){
+            j2.setRecusaMiniGame(true);
+        }
+        //nextPlayer.setRecusaMiniGame(true);
+    }
+
+    public boolean getRecusouMiniGame() {
+        if (nextPlayer.getNome().equals(j1.getNome())){
+            return j1.recusaMiniGame();
+        }else{// if (nextPlayer.getNome() == j2.getNome()){
+            return j2.recusaMiniGame();
+        }
+        //return nextPlayer.recusaMiniGame();
+        //return false;
+    }
+
+    public boolean isContas(){
+        return miniJogo instanceof MiniJogoContas;
+    }
+
+    public boolean isMiniGameDone(){
+        return miniJogo.miniGameDone(this);
+    }
+
+    public void guardaPecaEspecial(){
+        if (nextPlayer.getNome().equals(j1.getNome())){
+            j1.setPecaEspecial(true);
+        }else{// if (nextPlayer.getNome().equals(j2.getNome())){
+            j2.setPecaEspecial(true);
+        }
+    }
+
+    public void jogaPecaEspecial(int x){
+        for(int i = 0; i < nLinhas; i++){
+          if(tabuleiro[i][x] !=0 ){
+              tabuleiro[i][x] = 0; // apaga as jogadas na coluna indicada
+          }
+        }
+    }
+
+    public boolean colunaValida(int coluna){
+        if (coluna > 6 || coluna < 0) {
+            addMsgLog("Coluna Invalida\n");
+            return false;
+        }
+        return true;
+    }
+
+    public void inicializaMiniJogo() {
+
+        if(miniJogo == null) {
+            miniJogo = new MiniJogoContas(this);
+            return;
+        }
+        if(isContas())
+            miniJogo = new MiniJogoContas(this);
+        else
+            miniJogo = new MiniJogoPalavras(this);
+    }
+
+    public int joga_contas(int contaRes){
+
+        miniJogo.verificaResultado(contaRes,this);
+
+        if(miniJogo.miniGameDone(this)){
+            if(miniJogo.ganhou()) {
+                addMsgLog("Ganhou o minijogo!");
+                nextPlayer.setJaJogouMiniJogo(true);
+                return 1; // return vitoria
+            }
+            addMsgLog("Perdeu o minijogo!");
+            if (nextPlayer.getNome().equals(j1.getNome())){
+                j1.addJogada();
+                nextPlayer = j2;
+                return 2; // return derrota
+            }else{// if (nextPlayer.getNome() == j2.getNome()){
+                j2.addJogada();
+                nextPlayer = j1;
+                return 2; // return derrota
+            }
+            //nextPlayer.setJaJogouMiniJogo(true);
+        }
+
+        miniJogo.randomOperacao(this);
+        return 0;
+    }
+    public boolean joga_palavras(){
+        return false;
     }
 }

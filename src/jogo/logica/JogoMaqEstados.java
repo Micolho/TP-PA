@@ -44,22 +44,36 @@ public class JogoMaqEstados {
         estado = estado.jogar_peca(coluna);
     }
 
-    public void ganha_minijogo(){
-        estado = estado.ganha_minijogo();
-    }
-
-    public void perde_minijogo(){
-        estado = estado.perde_minijogo();
-    }
-
     public void terminar(){
         estado = estado.terminar();
     }
 
-
-
     @Override
     public String toString() {
         return jogoDados.toString();
+    }
+
+    public void recusa_minijogo() {
+        estado = estado.recusa_minijogo();
+    }
+
+    public void aceita_minijogo() {
+        estado = estado.aceita_minijogo();
+    }
+
+    public void joga_minijogo_contas(int n){
+        estado = estado.joga_minijogo_contas(n);
+    }
+
+    public void joga_minijogo_palavras(String n){
+        estado = estado.joga_minijogo_palavras(n);
+    }
+
+    public void guarda_peca_especial(){
+        estado = estado.guarda_peca_especial();
+    }
+
+    public void joga_peca_especial(int coluna){
+        estado = estado.joga_peca_especial(coluna);
     }
 }

@@ -9,14 +9,18 @@ public class DecideMiniJogo extends EstadoAdapter{
         super(jogoDados);
     }
 
-    public IEstado apos4jogadas() {
-        //por fazer
-        if(getJogoDados().apos4jogadas()){
-            return new MiniJogo(getJogoDados());
-        }else{
-            return new AguardaJogada(getJogoDados());
-        }
+    public IEstado aceita_minijogo() {
+        getJogoDados().inicializaMiniJogo();
+        if(getJogoDados().isContas())
+            return new MiniJogoContas(getJogoDados());
+
+        return new MiniJogoPalavras(getJogoDados());
     }
+    public IEstado recusa_minijogo(){
+        getJogoDados().recusaMiniGame();
+        return new AguardaJogada(getJogoDados());
+    }
+
 
     public Situacao getSituacaoAtual(){
         return Situacao.QUER_MINIJOGO;

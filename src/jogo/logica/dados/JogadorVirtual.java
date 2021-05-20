@@ -36,7 +36,7 @@ public class JogadorVirtual extends Jogador{
     public void setLastMiniGame(String minigame) {
     }
 
-    public boolean joga(JogoDados jogoDados){
+    public void joga(JogoDados jogoDados){
         boolean sair = false;
         int random;
         while(!sair) {
@@ -46,12 +46,28 @@ public class JogadorVirtual extends Jogador{
                  sair = true;
              }
         }
-
         addJogada();
-        return false;
     }
 
     public void setPosAJogar(int posAJogar){
+    }
+
+    public int getCreditos() {
+        return 0;
+    }
+    public void deductCredit() {
+    }
+    public boolean jaJogouMiniJogo(){
+        return false;
+    }
+
+    public void setJaJogouMiniJogo(boolean jaJogouMiniJogo) {
+
+    }
+
+    public void setRecusaMiniGame(boolean recusaMiniGame){}
+    public boolean recusaMiniGame(){
+        return false;
     }
 
     @Override

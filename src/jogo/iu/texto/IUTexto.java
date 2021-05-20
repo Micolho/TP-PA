@@ -108,19 +108,88 @@ public class IUTexto {
     private void iuAguardaJogadaVirtual()
     {
 
-        //System.out.println(jogoMaqEstados.toString());
-
-//        System.out.println("Introduza a coluna onde quer  ou -1 se deseja sair do jogo:");
-//        System.out.print("> ");
-//
-//        while(!s.hasNextInt()) s.next();
-//        value=s.nextInt();
-//
-//        if (value == -1)
-//            jogoMaqEstados.terminar();
-//        else
         jogoMaqEstados.jogar_peca(0); // 0 porque vai ser ignorado este valor
                                             // a coluna a jogar vai ser escolhida pelo computador
+    }
+
+    private void iuAguardaOpcao()
+    {
+        int value;
+
+        System.out.println("\n\n---------------------------------");
+        //System.out.println(jogoMaqEstados);
+
+        System.out.println();
+        System.out.println("Ronda do Minijogo");
+        System.out.println();
+        System.out.println("1-Aceitar");
+        System.out.println("2-Recusar");
+        System.out.print("> ");
+
+        while(!s.hasNextInt()) s.next();
+
+        value = s.nextInt();
+
+        switch(value){
+            case 1 -> jogoMaqEstados.aceita_minijogo();
+            case 2 -> jogoMaqEstados.recusa_minijogo();
+            default -> System.out.println("Escolha uma opcao valida!");
+        }
+    }
+
+    private void iuMiniJogoContas()
+    {
+        int value;
+
+        System.out.print("> ");
+
+        while(!s.hasNextInt()) s.next();
+
+        value = s.nextInt();
+
+        jogoMaqEstados.joga_minijogo_contas(value);
+
+    }
+
+    private void iuMiniJogoPalavras()
+    {
+        String answer;
+
+        System.out.print("> ");
+
+        while(!s.hasNextInt()) s.next();
+
+        while(!s.hasNext()) s.next();
+        answer = s.next();
+
+        jogoMaqEstados.joga_minijogo_palavras(answer);
+    }
+
+    private void iuDecidePecaEspecial()
+    {
+        int value;
+
+        System.out.println("1-Jogar peca especial");
+        System.out.println("2-Guardar peca especial");
+        System.out.print("> ");
+
+        while(!s.hasNextInt()) s.next();
+
+        value=s.nextInt();
+
+        switch(value){
+            case 1 -> {
+                System.out.println("Coluna em que deseja jogar?");
+                System.out.print("> ");
+
+                while(!s.hasNextInt()) s.next();
+                value=s.nextInt();
+
+                jogoMaqEstados.joga_peca_especial(value);
+            }
+            case 2 -> jogoMaqEstados.guarda_peca_especial();
+            default -> System.out.println("Escolha uma opcao valida!");
+        }
     }
 
     private void iuFinalJogo()
@@ -176,14 +245,18 @@ public class IUTexto {
                     iuAguardaJogadaVirtual();
                     break;
                 case QUER_MINIJOGO:
-                    //iuFinalJogo();
+                    iuAguardaOpcao();
                     break;
-                case MINIJOGO:
-                    //iuFinalJogo();
+                case MINIJOGO_CONTAS:
+                    iuMiniJogoContas();
+                    break;
+                case MINIJOGO_PALAVRAS:
+                    iuMiniJogoPalavras();
                     break;
                 case DECISAO_PECA_ESPECIAL:
-                    //iuFinalJogo();
+                    iuDecidePecaEspecial();
                     break;
+
                 case FIM_JOGO:
                     iuFinalJogo();
                     break;

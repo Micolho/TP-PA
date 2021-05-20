@@ -32,14 +32,6 @@ public abstract class EstadoAdapter implements IEstado {
         return this;
     }
     @Override
-    public IEstado apos4jogadas(){
-        return this;
-    }
-    @Override
-    public IEstado aguarda_opcao(){
-        return this;
-    }
-    @Override
     public IEstado aceita_minijogo(){
         return this;
     }
@@ -48,11 +40,11 @@ public abstract class EstadoAdapter implements IEstado {
         return this;
     }
     @Override
-    public IEstado ganha_minijogo(){
+    public IEstado joga_minijogo_contas(int n){
         return this;
     }
     @Override
-    public IEstado perde_minijogo(){
+    public IEstado joga_minijogo_palavras(String palavra){
         return this;
     }
     @Override
@@ -60,7 +52,7 @@ public abstract class EstadoAdapter implements IEstado {
         return this;
     }
     @Override
-    public IEstado joga_peca_especial(){
+    public IEstado joga_peca_especial(int coluna){
         return this;
     }
 }

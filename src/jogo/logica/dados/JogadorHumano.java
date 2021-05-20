@@ -5,20 +5,24 @@ public class JogadorHumano extends Jogador{
     private String nome;
     private int nJogadas;
     private boolean pecaEspecial; // se tem ou nao guardada
-    private String lastMiniGame;
+    //private String lastMiniGame;
     private int posAJogar;
     private int id;
+    private int creditos;
+    private boolean recusaMiniGame, jaJogouMiniJogo;
 
 
 
-    public JogadorHumano(String nome){
+    public JogadorHumano(String nome) {
         setNome(nome);
-        this.nJogadas = 0;
+        this.nJogadas = 1;
         pecaEspecial = false;
-        lastMiniGame = "";
-        id=count++;
+        //lastMiniGame = "";
+        id = count++;
+        creditos = 5;
+        recusaMiniGame = false;
+        jaJogouMiniJogo = false;
     }
-
     public int getId() {
         return id;
     }
@@ -45,21 +49,28 @@ public class JogadorHumano extends Jogador{
         pecaEspecial = peca;
     }
 
-    public String getLastMiniGame(){
+/*    public String getLastMiniGame(){
         return lastMiniGame;
     }
     public void setLastMiniGame(String minigame){
         lastMiniGame = minigame;
-    }
+    }*/
 
-    public boolean joga(JogoDados jogoDados){
+    public void joga(JogoDados jogoDados){
         jogoDados.registaTabuleiro(posAJogar, id);
         addJogada();
-        return false;
+        setRecusaMiniGame(false);
     }
 
     public int getPosAJogar() {
         return posAJogar;
+    }
+
+    public int getCreditos(){
+        return creditos;
+    }
+    public void deductCredit(){
+        creditos--;
     }
 
     public void setPosAJogar(int posAJogar) {
@@ -69,5 +80,20 @@ public class JogadorHumano extends Jogador{
     @Override
     public String toString() {
         return "\nNome do jogador: " + nome + " id: " + id + "\n";
+    }
+
+    public boolean recusaMiniGame() {
+        return recusaMiniGame;
+    }
+
+    public void setRecusaMiniGame(boolean recusaMiniGame) {
+        this.recusaMiniGame = recusaMiniGame;
+    }
+
+    public boolean jaJogouMiniJogo(){
+        return jaJogouMiniJogo;
+    }
+    public void setJaJogouMiniJogo(boolean jaJogouMiniJogo){
+        jaJogouMiniJogo = jaJogouMiniJogo;
     }
 }
