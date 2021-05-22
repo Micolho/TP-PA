@@ -1,31 +1,54 @@
 package jogo.logica.dados;
 
 public class MiniJogoPalavras extends MiniJogo {
-        int nCertas;
         long initTime;
+        float elapsedTime;
+        int countChars;
+        String palavras;
 
-        public MiniJogoPalavras(JogoDados jogoDados){
-            nCertas = 0;
+        float elapsedTimeSec;
+
+        public MiniJogoPalavras(String p1, String p2, String p3, String p4, String p5, JogoDados jogoDados){
+            elapsedTimeSec = 0;
+            palavras = p1 + " " + p2 + " " + p3 + " " + p4 + " " + p5;
+            jogoDados.addMsgLog("Digite as seguintes palavras corretamente(inclui os espacos)!");
+            jogaMinijogo(jogoDados);
             initTime = System.currentTimeMillis();
-
         }
 
     public boolean miniGameDone(JogoDados jogoDados){
-        if(nCertas == 5)
+        if(palavras.length() == 0)
             return true;
 
         return false;
     }
 
-    public void verificaResultado(String palavra){
-        //if( n == resultado) {
-            nCertas++;
-        //}
+    public boolean verificaResultado(String palavra, JogoDados jogoDados){
+        elapsedTime = (System.currentTimeMillis() - initTime) / 1000F;
+        if(palavras.equals(palavra)){
+            jogoDados.addMsgLog("Palavras digitadas corretamente");
+            if(elapsedTime <= (palavras.length()/2)){
+                jogoDados.addMsgLog("Ganhou o minijogo. Demorou " +elapsedTime+ " segundos.");
+                return true;
+            }
+            jogoDados.addMsgLog("Palavras digitadas corretamente, mas demorou " +
+                            "demasiado, o tempo maximo era " + (palavras.length()/2)
+                            + " demorou " + elapsedTime+ " segundos.");
+            return false;
+        }
+        jogoDados.addMsgLog("Palavras digitadas incorretamente!");
+        return false;
     }
+
     public void verificaResultado(int n, JogoDados jogoDados){}
-    public void randomOperacao(JogoDados jogoDados){}
+
+    public void jogaMinijogo(JogoDados jogoDados){
+         jogoDados.addMsgLog(palavras);
+    }
 
     public boolean ganhou(){
-            return true;
+            return false;
     }
+
+
 }

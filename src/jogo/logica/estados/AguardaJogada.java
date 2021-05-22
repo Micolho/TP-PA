@@ -26,6 +26,18 @@ public class AguardaJogada extends EstadoAdapter{
 
         return this;
     }
+    @Override
+    public IEstado joga_peca_especial(int coluna){
+        if (!getJogoDados().jogadorTemPecaEspecial())
+            return new AguardaJogada(getJogoDados());
+
+        if(!getJogoDados().colunaValida(coluna))
+            return new AguardaJogada(getJogoDados());
+
+        getJogoDados().jogaPecaEspecial(coluna);
+        return new AguardaJogada(getJogoDados());
+    }
+
 
     @Override
     public IEstado terminar() {

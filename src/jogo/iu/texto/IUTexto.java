@@ -86,28 +86,49 @@ public class IUTexto {
         jogoMaqEstados.random_jogador();
     }
 
-    private void iuAguardaJogadaHumana()
-    {
-        int value;
+    private void iuAguardaJogadaHumana() {
+        int value, coluna, coluna2;
 
 
-        //System.out.println(jogoMaqEstados.toString());
+        System.out.println(jogoMaqEstados);
 
-        System.out.println("Introduza a coluna onde quer  ou -1 se deseja sair do jogo:");
+        System.out.println("1-Jogar peca normal");
+        System.out.println("2-Jogar peca especial(pode jogar depois a peca normal)");
+        System.out.println("3-Sair");
         System.out.print("> ");
 
-        while(!s.hasNextInt()) s.next();
-        value=s.nextInt();
+        while (!s.hasNextInt()) s.next();
 
-        if (value == -1)
-            jogoMaqEstados.terminar();
-        else
-            jogoMaqEstados.jogar_peca(value);
+        value = s.nextInt();
+
+        switch (value) {
+            case 1 -> {
+                System.out.println("Introduza a coluna onde quer jogar:");
+                System.out.print("> ");
+
+                while (!s.hasNextInt()) s.next();
+                coluna = s.nextInt();
+
+                jogoMaqEstados.jogar_peca(coluna);
+            }
+            case 2 -> {
+                //System.out.println(jogoMaqEstados);
+                System.out.println("Coluna em que deseja jogar?");
+                System.out.print("> ");
+
+                while (!s.hasNextInt()) s.next();
+                coluna2 = s.nextInt();
+
+                jogoMaqEstados.joga_peca_especial(coluna2);
+            }
+            case 3 -> jogoMaqEstados.terminar();
+            default -> System.out.println("Escolha uma opcao valida!");
+
+        }
     }
-
     private void iuAguardaJogadaVirtual()
     {
-
+        System.out.println(jogoMaqEstados);
         jogoMaqEstados.jogar_peca(0); // 0 porque vai ser ignorado este valor
                                             // a coluna a jogar vai ser escolhida pelo computador
     }
@@ -179,6 +200,7 @@ public class IUTexto {
 
         switch(value){
             case 1 -> {
+                System.out.println(jogoMaqEstados);
                 System.out.println("Coluna em que deseja jogar?");
                 System.out.print("> ");
 
@@ -195,7 +217,7 @@ public class IUTexto {
     private void iuFinalJogo()
     {
         int value;
-
+        System.out.println(jogoMaqEstados);
         System.out.println("1-Jogar de novo");
         System.out.println("2-Sair");
         System.out.print("> ");

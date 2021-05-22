@@ -11,8 +11,12 @@ public class JogoMaqEstados {
     private JogoDados jogoDados;
     private IEstado estado;
 
-    public JogoMaqEstados(){
+    public JogoMaqEstados() throws Exception{
+        try{
         jogoDados = new JogoDados();
+        }catch (Exception e){
+            throw new Exception(e.getMessage());
+        }
         estado = new MenuInformativo(jogoDados);
     }
 

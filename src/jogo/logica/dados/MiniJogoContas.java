@@ -9,11 +9,11 @@ public class MiniJogoContas extends MiniJogo {
     public MiniJogoContas(JogoDados jogoDados){
         nCertas = 0;
         elapsedTimeSec = 0;
+        jogaMinijogo(jogoDados);
         initTime = System.currentTimeMillis();
-        randomOperacao(jogoDados);
     }
 
-    public void randomOperacao(JogoDados jogoDados){
+    public void jogaMinijogo(JogoDados jogoDados){
         int x = (int)(Math.random() * 4);
         int random1 = (int)(Math.random() * 9);
         int random2 = (int)(Math.random() * 9);
@@ -29,7 +29,7 @@ public class MiniJogoContas extends MiniJogo {
                 break;
             case 2: // /
                 jogoDados.addMsgLog(random1 + "/" + random2);
-                resultado = random1/random2; // podera ser alterado
+                resultado = random1/random2;
                 break;
             case 3: // x
                 jogoDados.addMsgLog(random1 + "*" + random2);
@@ -66,7 +66,9 @@ public class MiniJogoContas extends MiniJogo {
         return false;
     }
 
-    public void verificaResultado(String n){}
+    public boolean verificaResultado(String n, JogoDados jogoDados){
+        return false;
+    }
 
     //public void joga
 }

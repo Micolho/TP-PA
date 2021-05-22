@@ -18,9 +18,9 @@ public abstract class MiniJogo {
         // Get elapsed time in seconds
         float elapsedTimeSec = elapsedTimeMillis / 1000F;
     }*/
-    public abstract void randomOperacao(JogoDados jogoDados);
+    public abstract void jogaMinijogo(JogoDados jogoDados);
     public abstract void verificaResultado(int n, JogoDados jogoDados);
-    public abstract void verificaResultado(String n);
+    public abstract boolean verificaResultado(String n, JogoDados jogoDados);
     public abstract boolean miniGameDone(JogoDados jogoDados);
     public abstract boolean ganhou();
 }

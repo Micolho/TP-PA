@@ -94,6 +94,6 @@ public class JogadorHumano extends Jogador{
         return jaJogouMiniJogo;
     }
     public void setJaJogouMiniJogo(boolean jaJogouMiniJogo){
-        jaJogouMiniJogo = jaJogouMiniJogo;
+        this.jaJogouMiniJogo = jaJogouMiniJogo;
     }
 }

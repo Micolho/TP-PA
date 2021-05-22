@@ -2,8 +2,12 @@ package jogo.logica.dados;
 
 import jogo.logica.Tipo;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 import static jogo.logica.Tipo.*;
 
@@ -15,11 +19,22 @@ public class JogoDados {
     private int[][] tabuleiro = new int[nLinhas][nColunas];
     private List<String> msgLog = new ArrayList<>();
     private MiniJogo miniJogo;
+    static final String SEPARADORES_FICH_TEXTO = "[;,. ]+";
+    static String nomeFich = "ficheiros/palavras.txt";
+    static List<String> palavras = new ArrayList<>();
+    List<Integer> nRandom = new ArrayList<>();
 
 
-    public JogoDados(){
+    public JogoDados() throws Exception{
         setTabuleiroZeros();
         miniJogo = null;
+        try {
+            if (!preencheArrayPalavras()) {
+                throw new Exception("ficheiro nao tem 100 palavras com + de 5 letras cada");
+            }
+        }catch (IOException e){
+            throw new Exception("erro ao ler do ficheiro!");
+        }
     }
 
     public void setTabuleiroZeros(){
@@ -60,7 +75,7 @@ public class JogoDados {
 
         }
         addMsgLog("############## JOGADOR "+ nextPlayer.getNome()+" ###################");
-        addMsgLog(this.toString());//imprimir o tabuleiro
+        //addMsgLog(this.toString());//imprimir o tabuleiro
     }
 
     public void setTipoJogo(int tipo, String nome1, String nome2) {
@@ -167,7 +182,7 @@ public class JogoDados {
             nextPlayer = j1;
 
         }
-        addMsgLog(this.toString());//imprimir o tabuleiro
+        //addMsgLog(this.toString());//imprimir o tabuleiro
 
         return verificaVencedor(verifica4EmLinha());
     }
@@ -194,7 +209,7 @@ public class JogoDados {
 
         if(isTabuleiroCheio() && jogadorVencedor == 0){
             addMsgLog("Tabuleiro cheio e sem vencedores");
-            addMsgLog(this.toString());//imprimir o tabuleiro
+            //addMsgLog(this.toString());//imprimir o tabuleiro
             return true; //fim de jogo tabuleiro cheio sem vencedores
         }
 
@@ -284,21 +299,21 @@ public class JogoDados {
     }
 
     public void recusaMiniGame() {
-        if (nextPlayer.getNome().equals(j1.getNome())){
-            j1.setRecusaMiniGame(true);
-        }else if (nextPlayer.getNome().equals(j2.getNome())){
-            j2.setRecusaMiniGame(true);
-        }
-        //nextPlayer.setRecusaMiniGame(true);
+        //if (nextPlayer.getNome().equals(j1.getNome())){
+        //    j1.setRecusaMiniGame(true);
+        //}else if (nextPlayer.getNome().equals(j2.getNome())){
+        //    j2.setRecusaMiniGame(true);
+        //}
+        nextPlayer.setRecusaMiniGame(true);
     }
 
     public boolean getRecusouMiniGame() {
-        if (nextPlayer.getNome().equals(j1.getNome())){
-            return j1.recusaMiniGame();
-        }else{// if (nextPlayer.getNome() == j2.getNome()){
-            return j2.recusaMiniGame();
-        }
-        //return nextPlayer.recusaMiniGame();
+        //if (nextPlayer.getNome().equals(j1.getNome())){
+        //    return j1.recusaMiniGame();
+        //}else{// if (nextPlayer.getNome() == j2.getNome()){
+        //    return j2.recusaMiniGame();
+        //}
+        return nextPlayer.recusaMiniGame();
         //return false;
     }
 
@@ -311,11 +326,14 @@ public class JogoDados {
     }
 
     public void guardaPecaEspecial(){
-        if (nextPlayer.getNome().equals(j1.getNome())){
-            j1.setPecaEspecial(true);
-        }else{// if (nextPlayer.getNome().equals(j2.getNome())){
-            j2.setPecaEspecial(true);
-        }
+        //if (nextPlayer.getNome().equals(j1.getNome())){
+        //    j1.setPecaEspecial(true);
+        //}else{// if (nextPlayer.getNome().equals(j2.getNome())){
+        //   j2.setPecaEspecial(true);
+        //}
+        addMsgLog("Peca especial guardada! Pode jogar a jogada normal:");
+        //addMsgLog(this.toString());
+        //nextPlayer.setPecaEspecial(true); esta a ser efetuado ja antes logo e desnecessario repetir aqui
     }
 
     public void jogaPecaEspecial(int x){
@@ -324,6 +342,7 @@ public class JogoDados {
               tabuleiro[i][x] = 0; // apaga as jogadas na coluna indicada
           }
         }
+        nextPlayer.setPecaEspecial(false); // remove a peca especial (dada como usada)
     }
 
     public boolean colunaValida(int coluna){
@@ -340,15 +359,49 @@ public class JogoDados {
             miniJogo = new MiniJogoContas(this);
             return;
         }
+
         if(isContas())
-            miniJogo = new MiniJogoContas(this);
+            miniJogo = new MiniJogoPalavras(palavras.get((int)(Math.random() * palavras.size())),
+                                            palavras.get((int)(Math.random() * palavras.size())),
+                                            palavras.get((int)(Math.random() * palavras.size())),
+                                            palavras.get((int)(Math.random() * palavras.size())),
+                                            palavras.get((int)(Math.random() * palavras.size())),
+                                            this);
         else
-            miniJogo = new MiniJogoPalavras(this);
+            miniJogo = new MiniJogoContas(this);
     }
 
     public int joga_contas(int contaRes){
 
         miniJogo.verificaResultado(contaRes,this);
+
+        if(miniJogo.miniGameDone(this)){
+            if(miniJogo.ganhou()) {
+                addMsgLog("Ganhou o minijogo!");
+                nextPlayer.setPecaEspecial(true);
+                nextPlayer.setJaJogouMiniJogo(true);
+                return 1; // return vitoria
+            }
+            addMsgLog("Perdeu o minijogo!");
+            if (nextPlayer.getNome().equals(j1.getNome())){
+                j1.addJogada();
+                nextPlayer = j2;
+                return 2; // return derrota
+            }else{// if (nextPlayer.getNome() == j2.getNome()){
+                j2.addJogada();
+                nextPlayer = j1;
+                return 2; // return derrota
+            }
+            //nextPlayer.setJaJogouMiniJogo(true);
+        }
+
+        miniJogo.jogaMinijogo(this);
+        return 0;
+    }
+    public int joga_palavras(String palavra){
+
+
+        miniJogo.verificaResultado(palavra, this);
 
         if(miniJogo.miniGameDone(this)){
             if(miniJogo.ganhou()) {
@@ -369,10 +422,61 @@ public class JogoDados {
             //nextPlayer.setJaJogouMiniJogo(true);
         }
 
-        miniJogo.randomOperacao(this);
+        miniJogo.jogaMinijogo(this);
         return 0;
     }
-    public boolean joga_palavras(){
+
+    public boolean jogadorTemPecaEspecial() {
+        if ( nextPlayer.getPecaEspecial()){
+            return true;
+        }
+        addMsgLog("Nao possui uma peca especial!");
         return false;
+    }
+
+    public int geraRandom(){
+        for(int i = 0; i < 5; i++){
+            nRandom.add((int)(Math.random() * palavras.size()));
+        }
+        return 0;
+    }
+
+    public static boolean preencheArrayPalavras()
+            throws IOException
+    {
+        BufferedReader in = null;
+        String linha, tmp;
+
+        try{
+
+            in = new BufferedReader(new FileReader(nomeFich));
+
+            while((linha = in.readLine()) != null){ //Lê uma linha de texto.
+                // Retorna uma String contendo a linha lida
+                // sem o caracter de terminação da linha ou null
+                // no caso de ter atingido o fim de ficheiro.
+
+                Scanner scLinha = new Scanner(linha);
+                scLinha.useDelimiter(SEPARADORES_FICH_TEXTO);
+                if (!scLinha.hasNext()) {
+                    continue;
+                }
+
+                while (scLinha.hasNext()){
+                    tmp = scLinha.next().trim();
+                    if(tmp.length()>= 5)
+                        palavras.add(tmp);
+                }
+
+            }
+        }finally{ // sempre executado, em caso de sucesso ou insucesso
+            if(in != null) in.close();
+        }
+
+        if(palavras.size() < 100){
+            return false;
+        }
+
+        return true;
     }
 }

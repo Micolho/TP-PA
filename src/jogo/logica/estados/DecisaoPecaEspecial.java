@@ -14,6 +14,9 @@ public class DecisaoPecaEspecial extends EstadoAdapter{
     }
 
     public IEstado joga_peca_especial(int coluna){
+        if (!getJogoDados().jogadorTemPecaEspecial())
+            return new AguardaJogada(getJogoDados());
+
         if(!getJogoDados().colunaValida(coluna))
             return this;
 
