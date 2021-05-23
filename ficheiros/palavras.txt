@@ -59,7 +59,6 @@ dedo
 
 suplementar
 quartel general
-efluxo
 caçador
 artigo
 Liderança
@@ -69,9 +68,8 @@ reviver
 senior
 organizar
 gritar
-especialsuplementar
+especial suplementar
 quartel general
-efluxo
 caçador
 artigo
 Liderança
@@ -85,6 +83,10 @@ pagamento
 verifica
 pastel
 gabinete
+anual
+preceder
+anual
+preceder
 anual
 preceder
 diagrama

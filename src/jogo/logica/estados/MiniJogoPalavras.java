@@ -10,10 +10,9 @@ public class MiniJogoPalavras extends EstadoAdapter{
     }
 
     public IEstado joga_minijogo_palavras(String n){
-        //if(getJogoDados().){
-
-        //}
-        return this;
+        if (getJogoDados().joga_palavras(n))
+            return new DecisaoPecaEspecial(getJogoDados());
+        return new AguardaJogada(getJogoDados());
     }
 
     public Situacao getSituacaoAtual(){

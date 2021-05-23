@@ -55,7 +55,8 @@ public class JogadorVirtual extends Jogador{
     public int getCreditos() {
         return 0;
     }
-    public void deductCredit() {
+    public boolean deductCredit(int n) {
+        return false;
     }
     public boolean jaJogouMiniJogo(){
         return false;
@@ -74,4 +75,6 @@ public class JogadorVirtual extends Jogador{
     public String toString(){
         return "\nNome do jogador: " + nome + " id: " + id +"\n";
     }
+
+    public void resetJogadas(){}
 }

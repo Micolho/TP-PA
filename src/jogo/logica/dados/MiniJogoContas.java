@@ -15,26 +15,30 @@ public class MiniJogoContas extends MiniJogo {
 
     public void jogaMinijogo(JogoDados jogoDados){
         int x = (int)(Math.random() * 4);
-        int random1 = (int)(Math.random() * 9);
-        int random2 = (int)(Math.random() * 9);
+        int random1 = (int)(Math.random() * 99);
+        int random2 = (int)(Math.random() * 99);
 
-        switch(x){
-            case 0: // +
+        switch (x) {
+            // +
+            case 0 -> {
                 jogoDados.addMsgLog(random1 + "+" + random2);
-                resultado = random1+random2;
-                break;
-            case 1: // -
+                resultado = random1 + random2;
+            }
+            // -
+            case 1 -> {
                 jogoDados.addMsgLog(random1 + "-" + random2);
-                resultado = random1-random2;
-                break;
-            case 2: // /
+                resultado = random1 - random2;
+            }
+            // /
+            case 2 -> {
                 jogoDados.addMsgLog(random1 + "/" + random2);
-                resultado = random1/random2;
-                break;
-            case 3: // x
+                resultado = random1 / random2;
+            }
+            // x
+            case 3 -> {
                 jogoDados.addMsgLog(random1 + "*" + random2);
                 resultado = random1 * random2;
-                break;
+            }
         }
     }
 
@@ -59,9 +63,7 @@ public class MiniJogoContas extends MiniJogo {
 
     public boolean ganhou(){
         if(elapsedTimeSec != 0){
-            if(elapsedTimeSec <= 30){
-                return true;
-            }
+            return elapsedTimeSec <= 30;
         }
         return false;
     }
@@ -69,6 +71,4 @@ public class MiniJogoContas extends MiniJogo {
     public boolean verificaResultado(String n, JogoDados jogoDados){
         return false;
     }
-
-    //public void joga
 }

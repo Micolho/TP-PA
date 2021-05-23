@@ -3,7 +3,9 @@ package jogo.logica.estados;
 
 import jogo.logica.Situacao;
 
-public interface IEstado {
+import java.io.Serializable;
+
+public interface IEstado extends Serializable {
 
     IEstado opcoes_jogo();
     IEstado iniciar_jogo(int tipo, String nome1, String nome2);

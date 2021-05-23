@@ -4,8 +4,7 @@ public class JogadorHumano extends Jogador{
 
     private String nome;
     private int nJogadas;
-    private boolean pecaEspecial; // se tem ou nao guardada
-    //private String lastMiniGame;
+    private boolean pecaEspecial;
     private int posAJogar;
     private int id;
     private int creditos;
@@ -17,14 +16,10 @@ public class JogadorHumano extends Jogador{
         setNome(nome);
         this.nJogadas = 1;
         pecaEspecial = false;
-        //lastMiniGame = "";
         id = count++;
         creditos = 5;
         recusaMiniGame = false;
         jaJogouMiniJogo = false;
-    }
-    public int getId() {
-        return id;
     }
 
     public void setNome(String nome){
@@ -49,13 +44,6 @@ public class JogadorHumano extends Jogador{
         pecaEspecial = peca;
     }
 
-/*    public String getLastMiniGame(){
-        return lastMiniGame;
-    }
-    public void setLastMiniGame(String minigame){
-        lastMiniGame = minigame;
-    }*/
-
     public void joga(JogoDados jogoDados){
         jogoDados.registaTabuleiro(posAJogar, id);
         addJogada();
@@ -69,8 +57,12 @@ public class JogadorHumano extends Jogador{
     public int getCreditos(){
         return creditos;
     }
-    public void deductCredit(){
-        creditos--;
+    public boolean deductCredit(int n){
+        if (creditos - n >= 0) {
+            creditos = creditos - n;
+            return true;
+        }
+        return false;
     }
 
     public void setPosAJogar(int posAJogar) {
@@ -88,6 +80,10 @@ public class JogadorHumano extends Jogador{
 
     public void setRecusaMiniGame(boolean recusaMiniGame) {
         this.recusaMiniGame = recusaMiniGame;
+    }
+
+    public void resetJogadas(){
+        this.nJogadas = 1;
     }
 
     public boolean jaJogouMiniJogo(){

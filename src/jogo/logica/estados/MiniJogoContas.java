@@ -10,14 +10,14 @@ public class MiniJogoContas extends EstadoAdapter{
     }
 
     public IEstado joga_minijogo_contas(int n){
-        switch(getJogoDados().joga_contas(n)){
-            case 1: //ganhou minijogo
-                return new DecisaoPecaEspecial(getJogoDados());
-            case 2: //perdeu minijogo
-                return new AguardaJogada(getJogoDados());
-            default:
-                return this; // ainda nao acabou
-        }
+        return switch (getJogoDados().joga_contas(n)) {
+            //ganhou minijogo
+            case 1 -> new DecisaoPecaEspecial(getJogoDados());
+            //perdeu minijogo
+            case 2 -> new AguardaJogada(getJogoDados());
+            // ainda nao acabou
+            default -> this;
+        };
     }
 
     public Situacao getSituacaoAtual(){

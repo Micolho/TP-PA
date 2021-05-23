@@ -1,18 +1,17 @@
 package jogo.iu.texto;
 
-import jogo.logica.JogoMaqEstados;
+import jogo.logica.JogoGestao;
 import jogo.logica.Situacao;
 
 import java.util.Scanner;
 
 public class IUTexto {
-    private JogoMaqEstados jogoMaqEstados;
+    private JogoGestao jogoGestao;
     private Scanner s = new Scanner(System.in);
     private boolean sair = false;
-    private boolean nextState = false;
 
-    public IUTexto(JogoMaqEstados game) {
-        jogoMaqEstados = game;
+    public IUTexto(JogoGestao game) {
+        jogoGestao = game;
     }
 
     private void iuMenuInformativo() {
@@ -27,31 +26,35 @@ public class IUTexto {
         System.out.println("  O primeiro jogador a começar é selecionado de forma aleatória.");
         System.out.println("  A cada 4 jogadas, o jogador tem a opcao de aceitar participar num mini jogo" +
                 "para obter uma peça especial caso ganhe.");
+        System.out.println("  Cada jogador Humano, tem 5 creditos que pode usar para desfazer jogadas(ate 5)");
         System.out.println();
         System.out.println("  Mini Jogos:");
         System.out.println();
         System.out.println("  Contas:");
-        System.out.println("  PorFazer");
+        System.out.println("  Introduza apenas o valor das operacoes aritmeticas. Em caso de divisao, arredondar para o inteiro abaixo.");
         System.out.println();
         System.out.println("  Palavras:");
-        System.out.println("  PorFazer");
+        System.out.println("  Escreva a sequencia de palavras seguidas de acordo como aparecem no ecra, com os mesmos espacos em branco!");
         System.out.println();
+        System.out.println("  Peca especial:");
+        System.out.println("  Ao usar, pode apagar uma coluna de jogadas.");
         System.out.println("Clique no Enter para continuar!");
         System.out.print("> ");
         s.nextLine();
 
 
-        jogoMaqEstados.opcoesjogo();
+        jogoGestao.opcoesjogo();
     }
 
     private void iuEscolheJogo()
     {
         int value;
-        String name1, name2;
+        String name1, name2, filename;
 
         System.out.println("1 - Jogador vs Jogador");
         System.out.println("2 - Jogador vs Computador");
         System.out.println("3 - Computador vs Computador");
+        System.out.println("4 - Historico de jogos(Replay)");
         System.out.print("> ");
 
         while(!s.hasNextInt()) s.next();
@@ -72,9 +75,20 @@ public class IUTexto {
                 while(!s.hasNext()) s.next();
                 name2 = s.next();
 
-                jogoMaqEstados.iniciar_jogo(value, name1, name2);
-                nextState = true;
+                jogoGestao.iniciar_jogo(value, name1, name2);
 
+            }
+            case 4 ->{
+                System.out.println("Ficheiros Disponiveis no Historico\n");
+                System.out.println(jogoGestao.fileInDirectory());
+                System.out.println("\nQual o nome do replay que deseja ver:");
+                System.out.print("> ");
+
+                while(!s.hasNext()) s.next();
+
+                filename=s.next();
+
+                jogoGestao.leHist(filename);
             }
             default -> System.out.println("Escolha uma opcao valida!");
         }
@@ -83,18 +97,19 @@ public class IUTexto {
     private void iuPrimeiroAJogar()
     {
         System.out.println("\nVai ser executada a escolha do primeiro jogador: \n");
-        jogoMaqEstados.random_jogador();
+        jogoGestao.random_jogador();
     }
 
     private void iuAguardaJogadaHumana() {
-        int value, coluna, coluna2;
+        int value, coluna, coluna2, undoNumber;
 
-
-        System.out.println(jogoMaqEstados);
-
+        System.out.println();
+        System.out.println(jogoGestao);
+        System.out.println();
         System.out.println("1-Jogar peca normal");
         System.out.println("2-Jogar peca especial(pode jogar depois a peca normal)");
-        System.out.println("3-Sair");
+        System.out.println("3-Retroceder 1 ou varias jogadas(consome 1 credito por jogada retrocedida)");
+        System.out.println("4-Sair");
         System.out.print("> ");
 
         while (!s.hasNextInt()) s.next();
@@ -109,27 +124,37 @@ public class IUTexto {
                 while (!s.hasNextInt()) s.next();
                 coluna = s.nextInt();
 
-                jogoMaqEstados.jogar_peca(coluna);
+                jogoGestao.jogar_peca(coluna);
             }
             case 2 -> {
-                //System.out.println(jogoMaqEstados);
+                System.out.println(jogoGestao);
                 System.out.println("Coluna em que deseja jogar?");
                 System.out.print("> ");
 
                 while (!s.hasNextInt()) s.next();
                 coluna2 = s.nextInt();
 
-                jogoMaqEstados.joga_peca_especial(coluna2);
+                jogoGestao.joga_peca_especial(coluna2);
             }
-            case 3 -> jogoMaqEstados.terminar();
+            case 3 -> {
+                System.out.println(jogoGestao);
+                System.out.println("Quantas jogadas deseja retroceder?");
+                System.out.print("> ");
+
+                while (!s.hasNextInt()) s.next();
+                undoNumber = s.nextInt();
+
+                jogoGestao.undo(undoNumber);
+            }
+            case 4 -> jogoGestao.terminar();
             default -> System.out.println("Escolha uma opcao valida!");
 
         }
     }
     private void iuAguardaJogadaVirtual()
     {
-        System.out.println(jogoMaqEstados);
-        jogoMaqEstados.jogar_peca(0); // 0 porque vai ser ignorado este valor
+        System.out.println(jogoGestao);
+        jogoGestao.jogar_peca(0); // 0 porque vai ser ignorado este valor
                                             // a coluna a jogar vai ser escolhida pelo computador
     }
 
@@ -138,8 +163,7 @@ public class IUTexto {
         int value;
 
         System.out.println("\n\n---------------------------------");
-        //System.out.println(jogoMaqEstados);
-
+        System.out.println(jogoGestao.printNextPlayer());
         System.out.println();
         System.out.println("Ronda do Minijogo");
         System.out.println();
@@ -152,8 +176,8 @@ public class IUTexto {
         value = s.nextInt();
 
         switch(value){
-            case 1 -> jogoMaqEstados.aceita_minijogo();
-            case 2 -> jogoMaqEstados.recusa_minijogo();
+            case 1 -> jogoGestao.aceita_minijogo();
+            case 2 -> jogoGestao.recusa_minijogo();
             default -> System.out.println("Escolha uma opcao valida!");
         }
     }
@@ -168,22 +192,21 @@ public class IUTexto {
 
         value = s.nextInt();
 
-        jogoMaqEstados.joga_minijogo_contas(value);
+        jogoGestao.joga_minijogo_contas(value);
 
     }
 
     private void iuMiniJogoPalavras()
     {
-        String answer;
+        Scanner answer = new Scanner(System.in);
+        String answerString = "";
 
         System.out.print("> ");
 
-        while(!s.hasNextInt()) s.next();
+        answerString += answer.nextLine();
 
-        while(!s.hasNext()) s.next();
-        answer = s.next();
-
-        jogoMaqEstados.joga_minijogo_palavras(answer);
+        jogoGestao.joga_minijogo_palavras(answerString);
+        answer.close();
     }
 
     private void iuDecidePecaEspecial()
@@ -200,16 +223,16 @@ public class IUTexto {
 
         switch(value){
             case 1 -> {
-                System.out.println(jogoMaqEstados);
+                System.out.println(jogoGestao);
                 System.out.println("Coluna em que deseja jogar?");
                 System.out.print("> ");
 
                 while(!s.hasNextInt()) s.next();
                 value=s.nextInt();
 
-                jogoMaqEstados.joga_peca_especial(value);
+                jogoGestao.joga_peca_especial(value);
             }
-            case 2 -> jogoMaqEstados.guarda_peca_especial();
+            case 2 -> jogoGestao.guarda_peca_especial();
             default -> System.out.println("Escolha uma opcao valida!");
         }
     }
@@ -217,7 +240,9 @@ public class IUTexto {
     private void iuFinalJogo()
     {
         int value;
-        System.out.println(jogoMaqEstados);
+
+        jogoGestao.afterFinish();
+        System.out.println(jogoGestao);
         System.out.println("1-Jogar de novo");
         System.out.println("2-Sair");
         System.out.print("> ");
@@ -227,7 +252,7 @@ public class IUTexto {
         value=s.nextInt();
 
         if(value==1){
-            jogoMaqEstados.opcoesjogo();
+            jogoGestao.opcoesjogo();
         }else if(value == 2){
             sair = true;
         }
@@ -237,55 +262,31 @@ public class IUTexto {
 
         while(!sair){
 
-            if(jogoMaqEstados.getMsgLog().size()>0){
+            if(jogoGestao.getMsgLog().size()>0){
 
                 System.out.println();
 
-                for(String msg:jogoMaqEstados.getMsgLog()){
+                for(String msg:jogoGestao.getMsgLog()){
                     System.out.println("--> " + msg);
                 }
 
-                jogoMaqEstados.clearMsgLog();
+                jogoGestao.clearMsgLog();
 
             }
-            Situacao situacao = jogoMaqEstados.getSituacaoAtual();
+            Situacao situacao = jogoGestao.getSituacaoAtual();
 
             switch (situacao) {
-                case MENU_INFORMATIVO:
-                    iuMenuInformativo();
-                    break;
-                case ESCOLHE_JOGO:
-                    iuEscolheJogo();
-                    break;
-                case PRIMEIRO_A_JOGAR:
-                    iuPrimeiroAJogar();
-                    break;
-                case AGUARDA_JOGADA_HUMANA:
-                    iuAguardaJogadaHumana();
-                    break;
-                case AGUARDA_JOGADA_VIRTUAL:
-                    iuAguardaJogadaVirtual();
-                    break;
-                case QUER_MINIJOGO:
-                    iuAguardaOpcao();
-                    break;
-                case MINIJOGO_CONTAS:
-                    iuMiniJogoContas();
-                    break;
-                case MINIJOGO_PALAVRAS:
-                    iuMiniJogoPalavras();
-                    break;
-                case DECISAO_PECA_ESPECIAL:
-                    iuDecidePecaEspecial();
-                    break;
-
-                case FIM_JOGO:
-                    iuFinalJogo();
-                    break;
-
-                default:
-                    System.out.println("Fora de controlo");
-                    break;
+                case MENU_INFORMATIVO -> iuMenuInformativo();
+                case ESCOLHE_JOGO -> iuEscolheJogo();
+                case PRIMEIRO_A_JOGAR -> iuPrimeiroAJogar();
+                case AGUARDA_JOGADA_HUMANA -> iuAguardaJogadaHumana();
+                case AGUARDA_JOGADA_VIRTUAL -> iuAguardaJogadaVirtual();
+                case QUER_MINIJOGO -> iuAguardaOpcao();
+                case MINIJOGO_CONTAS -> iuMiniJogoContas();
+                case MINIJOGO_PALAVRAS -> iuMiniJogoPalavras();
+                case DECISAO_PECA_ESPECIAL -> iuDecidePecaEspecial();
+                case FIM_JOGO -> iuFinalJogo();
+                default -> System.out.println("Fora de controlo");
             }
         }
 

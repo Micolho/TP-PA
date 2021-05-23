@@ -1,13 +1,15 @@
 package jogo.logica;
 
+import jogo.logica.dados.Jogador;
 import jogo.logica.dados.JogoDados;
-import jogo.logica.estados.EscolheJogo;
 import jogo.logica.estados.IEstado;
 import jogo.logica.estados.MenuInformativo;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class JogoMaqEstados {
+public class JogoMaqEstados implements Serializable {
+    private static final long serialVersionUID = 1L;
     private JogoDados jogoDados;
     private IEstado estado;
 
@@ -36,6 +38,10 @@ public class JogoMaqEstados {
         return jogoDados.getMsgLog();
     }
 
+    public void addMsgLog(String msg){
+        jogoDados.addMsgLog(msg);
+    }
+
     public void clearMsgLog(){
         jogoDados.clearMsgLog();
     }
@@ -54,7 +60,8 @@ public class JogoMaqEstados {
 
     @Override
     public String toString() {
-        return jogoDados.toString();
+        return estado.getSituacaoAtual() +"\n"
+                + jogoDados.printNextPlayer() +"\n"+ jogoDados.toString();
     }
 
     public void recusa_minijogo() {
@@ -80,4 +87,25 @@ public class JogoMaqEstados {
     public void joga_peca_especial(int coluna){
         estado = estado.joga_peca_especial(coluna);
     }
+
+    public boolean deduzCreditos(int n){
+        return jogoDados.deduzCreditos(n);
+    }
+
+    public void resetUndo(Jogador jogador){
+        jogoDados.resetUndo(jogador);
+    }
+
+    public int getCreditos(){
+        return jogoDados.getCreditos();
+    }
+
+    public String printNextPlayer() {
+        return jogoDados.printNextPlayer();
+    }
+
+    public Jogador getPlayer(){
+        return jogoDados.getPlayer();
+    }
+
 }

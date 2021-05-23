@@ -1,19 +1,15 @@
 package jogo.logica.dados;
 
-import jogo.logica.Tipo;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import static jogo.logica.Tipo.*;
-
-public class JogoDados {
+public class JogoDados implements Serializable {
     private static final int nLinhas = 6, nColunas = 7;
-    private Tipo tipoJogo;
     private Jogador nextPlayer;
     private Jogador j1, j2;
     private int[][] tabuleiro = new int[nLinhas][nColunas];
@@ -22,7 +18,7 @@ public class JogoDados {
     static final String SEPARADORES_FICH_TEXTO = "[;,. ]+";
     static String nomeFich = "ficheiros/palavras.txt";
     static List<String> palavras = new ArrayList<>();
-    List<Integer> nRandom = new ArrayList<>();
+    private List<String> DecorrerMiniJogo = new ArrayList<>();
 
 
     public JogoDados() throws Exception{
@@ -59,8 +55,8 @@ public class JogoDados {
         return true;
     }
 
-    public String getPlayers(){
-        return j1.toString() + j2.toString();
+    public Jogador getPlayer(){
+        return nextPlayer;
     }
 
     public void randomJogador() {
@@ -74,7 +70,7 @@ public class JogoDados {
             addMsgLog("O Jogador " + j2.getNome() + " ganhou o sorteio do primeiro a jogar!");
 
         }
-        addMsgLog("############## JOGADOR "+ nextPlayer.getNome()+" ###################");
+        //addMsgLog("############## JOGADOR "+ nextPlayer.getNome()+" ###################");
         //addMsgLog(this.toString());//imprimir o tabuleiro
     }
 
@@ -84,17 +80,14 @@ public class JogoDados {
         // 3 - computer vs computer
         switch (tipo) { //suggest do intelij switch enhanced
             case 1 -> {
-                this.tipoJogo = PlayerVsPlayer;
                 this.j1 = new JogadorHumano(nome1); //id impar
                 this.j2 = new JogadorHumano(nome2); //id par
             }
             case 2 -> {
-                this.tipoJogo = PlayerVsComputer;
                 this.j1 = new JogadorHumano(nome1);
                 this.j2 = new JogadorVirtual(nome2);
             }
             case 3 -> {
-                this.tipoJogo = ComputerVsComputer;
                 this.j1 = new JogadorVirtual(nome1);
                 this.j2 = new JogadorVirtual(nome2);
             }
@@ -143,6 +136,14 @@ public class JogoDados {
                 }
             }
         }
+
+        //s.append("\n Vez do jogador ").append(nextPlayer.getNome()).append("!");
+        return s.toString();
+    }
+
+    public String printNextPlayer(){
+        StringBuilder s = new StringBuilder();
+        s.append("\n Vez do jogador ").append(nextPlayer.getNome()).append("!");
         return s.toString();
     }
 
@@ -215,7 +216,7 @@ public class JogoDados {
 
         if (jogadorVencedor == 0){
             //addMsgLog("Sem vencedores ainda\n");
-            addMsgLog("############## JOGADOR "+ nextPlayer.getNome()+" ###################");
+            //addMsgLog("############## JOGADOR "+ nextPlayer.getNome()+" ###################");
             return false;
         }
 
@@ -241,10 +242,10 @@ public class JogoDados {
                         jogadorVencedor == tabuleiro[l][c+1] &&
                         jogadorVencedor == tabuleiro[l][c+2] &&
                         jogadorVencedor == tabuleiro[l][c+3]){
-                    addMsgLog(" l:"+ l + " c:"+c +
-                            " l:"+ (l) + " c:" +(c+1)+
-                            " l:"+ (l) + " c:" +(c+2)+
-                            " l:"+ (l) + " c:"  +(c+3));
+//                    addMsgLog(" l:"+ l + " c:"+c +
+//                            " l:"+ (l) + " c:" +(c+1)+
+//                            " l:"+ (l) + " c:" +(c+2)+
+//                            " l:"+ (l) + " c:"  +(c+3));
                     return jogadorVencedor;
                 }
                 if (l + 3 < nLinhas){
@@ -252,30 +253,30 @@ public class JogoDados {
                     if (jogadorVencedor == tabuleiro[l+1][c] && //verificar vencedor numa linha
                             jogadorVencedor == tabuleiro[l+2][c] &&
                             jogadorVencedor == tabuleiro[l+3][c]) {
-                        addMsgLog(" l:"+ l + " c:"+c +
-                                " l:"+ (l+1) + " c:" +(c)+
-                                " l:"+ (l+2) + " c:" +(c)+
-                                " l:"+ (l+3) + " c:"  +(c));
+//                        addMsgLog(" l:"+ l + " c:"+c +
+//                                " l:"+ (l+1) + " c:" +(c)+
+//                                " l:"+ (l+2) + " c:" +(c)+
+//                                " l:"+ (l+3) + " c:"  +(c));
                         return jogadorVencedor;
                     }
                     if (c + 3 < nColunas && // verificar vencedor numa diagonal ex: x -> aspecto visual na consola
                             jogadorVencedor == tabuleiro[l+1][c+1] &&//              x
                             jogadorVencedor == tabuleiro[l+2][c+2] &&//               x
                             jogadorVencedor == tabuleiro[l+3][c+3]) {//                x
-                        addMsgLog(" l:"+ l + " c:"+c +
-                                " l:"+ (l+1) + " c:" +(c+1)+
-                                " l:"+ (l+2) + " c:" +(c+2)+
-                                " l:"+ (l+3) + " c:"  +(c+3));
+//                        addMsgLog(" l:"+ l + " c:"+c +
+//                                " l:"+ (l+1) + " c:" +(c+1)+
+//                                " l:"+ (l+2) + " c:" +(c+2)+
+//                                " l:"+ (l+3) + " c:"  +(c+3));
                         return jogadorVencedor;
                     }
                     if (c - 3 >= 0 && // verificar vencedor numa diagonal ex: x -> aspecto visual na consola
                             jogadorVencedor == tabuleiro[l+1][c-1] &&//      x
                             jogadorVencedor == tabuleiro[l+2][c-2] &&//     x
                             jogadorVencedor == tabuleiro[l+3][c-3]) {//    x
-                        addMsgLog(" l:"+ l + " c:"+c +
-                                " l:"+ (l+1) + " c:" +(c-1)+
-                                " l:"+ (l+2) + " c:" +(c-2)+
-                                " l:"+ (l+3) + " c:"  +(c-3));
+//                        addMsgLog(" l:"+ l + " c:"+c +
+//                                " l:"+ (l+1) + " c:" +(c-1)+
+//                                " l:"+ (l+2) + " c:" +(c-2)+
+//                                " l:"+ (l+3) + " c:"  +(c-3));
                         return jogadorVencedor;
                     }
                 }
@@ -299,22 +300,11 @@ public class JogoDados {
     }
 
     public void recusaMiniGame() {
-        //if (nextPlayer.getNome().equals(j1.getNome())){
-        //    j1.setRecusaMiniGame(true);
-        //}else if (nextPlayer.getNome().equals(j2.getNome())){
-        //    j2.setRecusaMiniGame(true);
-        //}
         nextPlayer.setRecusaMiniGame(true);
     }
 
     public boolean getRecusouMiniGame() {
-        //if (nextPlayer.getNome().equals(j1.getNome())){
-        //    return j1.recusaMiniGame();
-        //}else{// if (nextPlayer.getNome() == j2.getNome()){
-        //    return j2.recusaMiniGame();
-        //}
         return nextPlayer.recusaMiniGame();
-        //return false;
     }
 
     public boolean isContas(){
@@ -326,14 +316,7 @@ public class JogoDados {
     }
 
     public void guardaPecaEspecial(){
-        //if (nextPlayer.getNome().equals(j1.getNome())){
-        //    j1.setPecaEspecial(true);
-        //}else{// if (nextPlayer.getNome().equals(j2.getNome())){
-        //   j2.setPecaEspecial(true);
-        //}
         addMsgLog("Peca especial guardada! Pode jogar a jogada normal:");
-        //addMsgLog(this.toString());
-        //nextPlayer.setPecaEspecial(true); esta a ser efetuado ja antes logo e desnecessario repetir aqui
     }
 
     public void jogaPecaEspecial(int x){
@@ -361,14 +344,18 @@ public class JogoDados {
         }
 
         if(isContas())
-            miniJogo = new MiniJogoPalavras(palavras.get((int)(Math.random() * palavras.size())),
-                                            palavras.get((int)(Math.random() * palavras.size())),
-                                            palavras.get((int)(Math.random() * palavras.size())),
-                                            palavras.get((int)(Math.random() * palavras.size())),
-                                            palavras.get((int)(Math.random() * palavras.size())),
+            miniJogo = new MiniJogoPalavras(palavras.get(randomPosPalavras()),
+                                            palavras.get(randomPosPalavras()),
+                                            palavras.get(randomPosPalavras()),
+                                            palavras.get(randomPosPalavras()),
+                                            palavras.get(randomPosPalavras()),
                                             this);
         else
             miniJogo = new MiniJogoContas(this);
+    }
+
+    public int randomPosPalavras(){
+        return (int)(Math.random() * palavras.size()-1);
     }
 
     public int joga_contas(int contaRes){
@@ -392,38 +379,26 @@ public class JogoDados {
                 nextPlayer = j1;
                 return 2; // return derrota
             }
-            //nextPlayer.setJaJogouMiniJogo(true);
         }
 
         miniJogo.jogaMinijogo(this);
         return 0;
     }
-    public int joga_palavras(String palavra){
-
-
-        miniJogo.verificaResultado(palavra, this);
-
-        if(miniJogo.miniGameDone(this)){
-            if(miniJogo.ganhou()) {
-                addMsgLog("Ganhou o minijogo!");
-                nextPlayer.setJaJogouMiniJogo(true);
-                return 1; // return vitoria
-            }
-            addMsgLog("Perdeu o minijogo!");
-            if (nextPlayer.getNome().equals(j1.getNome())){
-                j1.addJogada();
-                nextPlayer = j2;
-                return 2; // return derrota
-            }else{// if (nextPlayer.getNome() == j2.getNome()){
-                j2.addJogada();
-                nextPlayer = j1;
-                return 2; // return derrota
-            }
-            //nextPlayer.setJaJogouMiniJogo(true);
+    public boolean joga_palavras(String palavra){
+        if(miniJogo.verificaResultado(palavra, this)) {
+            nextPlayer.setPecaEspecial(true);
+            nextPlayer.setJaJogouMiniJogo(true);
+            return true;
         }
 
-        miniJogo.jogaMinijogo(this);
-        return 0;
+        if (nextPlayer.getNome().equals(j1.getNome())){
+            j1.addJogada();
+            nextPlayer = j2;
+        }else{
+            j2.addJogada();
+            nextPlayer = j1;
+        }
+        return false;
     }
 
     public boolean jogadorTemPecaEspecial() {
@@ -432,13 +407,6 @@ public class JogoDados {
         }
         addMsgLog("Nao possui uma peca especial!");
         return false;
-    }
-
-    public int geraRandom(){
-        for(int i = 0; i < 5; i++){
-            nRandom.add((int)(Math.random() * palavras.size()));
-        }
-        return 0;
     }
 
     public static boolean preencheArrayPalavras()
@@ -473,10 +441,29 @@ public class JogoDados {
             if(in != null) in.close();
         }
 
-        if(palavras.size() < 100){
-            return false;
-        }
-
-        return true;
+        return palavras.size() >= 100;
     }
+
+    public void resetUndo(Jogador jogador){
+        if(jogador.getNome().equals(j1.getNome())){
+            j1.resetJogadas();
+            j1.setPecaEspecial(false);
+        }else{
+            j2.resetJogadas();
+            j2.setPecaEspecial(false);
+        }
+    }
+
+    public boolean deduzCreditos(int n){
+        if(nextPlayer.getNome().equals(j1.getNome())){
+            return j1.deductCredit(n);
+        }else{
+            return j2.deductCredit(n);
+        }
+    }
+
+    public int getCreditos(){
+        return nextPlayer.getCreditos();
+    }
+
 }

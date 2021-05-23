@@ -3,7 +3,6 @@ package jogo.logica.dados;
 public class MiniJogoPalavras extends MiniJogo {
         long initTime;
         float elapsedTime;
-        int countChars;
         String palavras;
 
         float elapsedTimeSec;
@@ -17,17 +16,14 @@ public class MiniJogoPalavras extends MiniJogo {
         }
 
     public boolean miniGameDone(JogoDados jogoDados){
-        if(palavras.length() == 0)
-            return true;
-
-        return false;
+        return palavras.length() == 0;
     }
 
     public boolean verificaResultado(String palavra, JogoDados jogoDados){
         elapsedTime = (System.currentTimeMillis() - initTime) / 1000F;
         if(palavras.equals(palavra)){
             jogoDados.addMsgLog("Palavras digitadas corretamente");
-            if(elapsedTime <= (palavras.length()/2)){
+            if(elapsedTime <= (float)(palavras.length()/2)){
                 jogoDados.addMsgLog("Ganhou o minijogo. Demorou " +elapsedTime+ " segundos.");
                 return true;
             }
