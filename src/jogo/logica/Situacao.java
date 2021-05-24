@@ -1,6 +1,6 @@
 package jogo.logica;
 
-public enum Situacao {
+public enum Situacao{
     MENU_INFORMATIVO,
     ESCOLHE_JOGO,
     PRIMEIRO_A_JOGAR,

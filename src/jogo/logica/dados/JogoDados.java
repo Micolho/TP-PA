@@ -16,7 +16,7 @@ public class JogoDados implements Serializable {
     private List<String> msgLog = new ArrayList<>();
     private MiniJogo miniJogo;
     static final String SEPARADORES_FICH_TEXTO = "[;,. ]+";
-    static String nomeFich = "ficheiros/palavras.txt";
+    static String nomeFich = ".\\ficheiros\\palavras.txt";
     static List<String> palavras = new ArrayList<>();
     private List<String> DecorrerMiniJogo = new ArrayList<>();
 

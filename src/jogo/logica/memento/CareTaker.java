@@ -78,12 +78,16 @@ public class CareTaker {
         ObjectOutputStream out = null;
 
         try {
-            out = new ObjectOutputStream(new FileOutputStream("/ficheiros/historico1.bin"));
+            out = new ObjectOutputStream(new FileOutputStream(".\\ficheiros\\historico1.bin"));
             out.writeObject(listHist);
         } catch (IOException e) {
             jogoOriginator.addMsgLog("Erro GravaHist: " + e.getMessage());
         } finally {
             if (out != null) out.close();
         }
+    }
+
+    public Memento getLastMemento() {
+        return listHist.get(listHist.size()-1);
     }
 }

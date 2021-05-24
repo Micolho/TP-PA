@@ -55,6 +55,7 @@ public class IUTexto {
         System.out.println("2 - Jogador vs Computador");
         System.out.println("3 - Computador vs Computador");
         System.out.println("4 - Historico de jogos(Replay)");
+        System.out.println("5 - Carregar jogo");
         System.out.print("> ");
 
         while(!s.hasNextInt()) s.next();
@@ -90,6 +91,15 @@ public class IUTexto {
 
                 jogoGestao.leHist(filename);
             }
+            case 5 -> {
+                System.out.println("Insira o nome do ficheiro a carregar!\n");
+                System.out.print("> ");
+
+                while(!s.hasNext()) s.next();
+
+                filename=s.next();
+                jogoGestao.loadFromFile(filename);
+            }
             default -> System.out.println("Escolha uma opcao valida!");
         }
     }
@@ -102,6 +112,7 @@ public class IUTexto {
 
     private void iuAguardaJogadaHumana() {
         int value, coluna, coluna2, undoNumber;
+        String filename;
 
         System.out.println();
         System.out.println(jogoGestao);
@@ -146,9 +157,31 @@ public class IUTexto {
 
                 jogoGestao.undo(undoNumber);
             }
-            case 4 -> jogoGestao.terminar();
-            default -> System.out.println("Escolha uma opcao valida!");
+            case 4 -> {
+                System.out.println("1 - Gravar, para jogar mais tarde!");
+                System.out.println("2 - Sair, sem gravar!");
+                System.out.print("> ");
 
+                while (!s.hasNextInt()) s.next();
+                value = s.nextInt();
+                switch (value){
+                    case 1 -> {
+                        System.out.println("Indique o nome do ficheiro a gravar!");
+                        System.out.print("> ");
+
+                        while(!s.hasNext()) s.next();
+
+                        filename=s.next();
+                        jogoGestao.saveToFile(filename);
+                        jogoGestao.terminar();
+                    }
+                    case 2 -> {
+                        jogoGestao.terminar();
+                    }
+                    default -> System.out.println("Escolha uma opcao valida!");
+                }
+            }
+            default -> System.out.println("Escolha uma opcao valida!");
         }
     }
     private void iuAguardaJogadaVirtual()

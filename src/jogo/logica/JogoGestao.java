@@ -8,9 +8,10 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JogoGestao {
+public class JogoGestao implements Serializable{
     private JogoOriginator jogoOriginator;
     private CareTaker careTaker;
+    private SaveAndLoad saveAndLoad;
 
 
     public JogoGestao() throws Exception{
@@ -20,6 +21,7 @@ public class JogoGestao {
         }catch (Exception e){
             throw new Exception(e.getMessage());
         }
+        saveAndLoad = new SaveAndLoad();
     }
     //caretaker
     public void undo(int n){
@@ -135,5 +137,26 @@ public class JogoGestao {
             s.append(f.getName()).append("\n");
         }
         return s.toString();
+    }
+
+    public void saveToFile(String name){
+        careTaker.gravaMemento();
+        Memento obj =careTaker.getLastMemento();
+
+        if(saveAndLoad.saveToFile(name, obj)) {
+            jogoOriginator.addMsgLog("Guardado com sucesso!");
+            return;
+        }
+        jogoOriginator.addMsgLog("Erro ao gravar!");
+
+    }
+
+    public void loadFromFile(String name){
+        try{
+            Memento m = (Memento)saveAndLoad.loadFromFile(name);
+            jogoOriginator.setMemento(m);
+        } catch (Exception e) {
+            jogoOriginator.addMsgLog("Erro ao carregar jogo!");
+        }
     }
 }
