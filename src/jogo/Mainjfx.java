@@ -3,6 +3,9 @@ package jogo;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import jogo.iu.gui.Root;
 import jogo.logica.JogoGestao;
@@ -13,16 +16,16 @@ public class Mainjfx extends Application {
     @Override
     public void start(Stage primaryStage) {
 
-        try {
+       try {
             JogoGestao jogoGestao = new JogoGestao();
             JogoObservavel jogoObservavel = new JogoObservavel(jogoGestao);
 
             Root Root = new Root(jogoObservavel);
+            Scene scene = new Scene(Root, 960, 600);
 
-            Scene scene = new Scene(Root);
-            //primaryStage.setResizable(false);
+            primaryStage.setResizable(true);
             primaryStage.setScene(scene);
-            primaryStage.setTitle("\"4 em Linha\"");
+            primaryStage.setTitle("Connect4");
             primaryStage.setOnCloseRequest(windowEvent -> Platform.exit());
             primaryStage.show();
 

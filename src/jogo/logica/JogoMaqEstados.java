@@ -108,4 +108,8 @@ public class JogoMaqEstados implements Serializable {
         return jogoDados.getPlayer();
     }
 
+    public int[][] getTabuleiro() {
+        return jogoDados.getTabuleiro();
+    }
+
 }

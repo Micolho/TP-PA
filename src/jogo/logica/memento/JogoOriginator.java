@@ -134,4 +134,8 @@ public class JogoOriginator {
             throw new Exception(e.getMessage());
         }
     }
+
+    public int[][] getTabuleiro() {
+        return jogoMaqEstados.getTabuleiro();
+    }
 }

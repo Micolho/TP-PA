@@ -24,13 +24,13 @@ public class JogoDados implements Serializable {
     public JogoDados() throws Exception{
         setTabuleiroZeros();
         miniJogo = null;
-        try {
-            if (!preencheArrayPalavras()) {
-                throw new Exception("ficheiro nao tem 100 palavras com + de 5 letras cada");
-            }
-        }catch (IOException e){
-            throw new Exception("erro ao ler do ficheiro!");
-        }
+//        try {
+//            if (!preencheArrayPalavras()) {
+//                throw new Exception("ficheiro nao tem 100 palavras com + de 5 letras cada");
+//            }
+//        }catch (IOException e){
+//            throw new Exception("erro ao ler do ficheiro!");
+//        }
     }
 
     public void setTabuleiroZeros(){
@@ -460,6 +460,10 @@ public class JogoDados implements Serializable {
         }else{
             return j2.deductCredit(n);
         }
+    }
+
+    public int[][] getTabuleiro() {
+        return tabuleiro;
     }
 
     public int getCreditos(){

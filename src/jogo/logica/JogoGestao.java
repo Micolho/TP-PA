@@ -138,6 +138,18 @@ public class JogoGestao implements Serializable{
         }
         return s.toString();
     }
+    public List<String> ListOfFileInDirectory(){
+        List<String> s = new ArrayList<>();
+        File dir = new File("./ficheiros/");
+        File [] files = dir.listFiles((File d, String name) ->{ // lambda para retornar ficheiros acabados em .bin
+            return name.endsWith(".bin") && name.contains("historico");
+        });
+
+        for (File f : files) {
+            s.add(f.getName());
+        }
+        return s;
+    }
 
     public void saveToFile(String name){
         careTaker.gravaMemento();
@@ -158,5 +170,9 @@ public class JogoGestao implements Serializable{
         } catch (Exception e) {
             jogoOriginator.addMsgLog("Erro ao carregar jogo!");
         }
+    }
+
+    public int[][] getTabuleiro() {
+        return jogoOriginator.getTabuleiro();
     }
 }
