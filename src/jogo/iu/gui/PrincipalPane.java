@@ -1,14 +1,15 @@
 package jogo.iu.gui;
 
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import jogo.iu.gui.estados.EscolheJogoPane;
+import jogo.iu.gui.estados.MenuInformativoPane;
 import jogo.logica.JogoObservavel;
+import jogo.logica.Situacao;
 
-import javax.swing.plaf.SeparatorUI;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
@@ -18,6 +19,7 @@ public class PrincipalPane extends StackPane {
     private JogoObservavel jogoObservavel;
     private VistaTabuleiro vistaTabuleiro;
     private Label bottomText;
+    private VBox vboxJogo;
 
 
     public PrincipalPane(JogoObservavel jogoObservavel) {
@@ -30,12 +32,7 @@ public class PrincipalPane extends StackPane {
     private void registarObservador(){
         // regista um observador do jogoObservavel
         jogoObservavel.addPropertyChangeListener(PROPRIEDADE_JOGO,
-                new PropertyChangeListener() {
-                    @Override
-                    public void propertyChange(PropertyChangeEvent evt) {
-                        atualiza();
-                    }
-                }
+                evt -> atualiza()
         );
     }
 
@@ -48,7 +45,7 @@ public class PrincipalPane extends StackPane {
 
         // Central
 
-        VBox vbox = new VBox();
+        vboxJogo = new VBox();
 
         vistaTabuleiro = new VistaTabuleiro(jogoObservavel);
         vistaTabuleiro.setAlignment(Pos.CENTER_LEFT);
@@ -65,23 +62,25 @@ public class PrincipalPane extends StackPane {
         HBox hBoxBottomText = new HBox(bottomText);
         hBoxBottomText.setAlignment(Pos.BOTTOM_CENTER);
 
-        vbox.getChildren().addAll(hBoxVistaEOpcoes, new Separator(), hBoxBottomText);
-        vbox.setAlignment(Pos.CENTER);
+        vboxJogo.getChildren().addAll(hBoxVistaEOpcoes, new Separator(), hBoxBottomText);
+        vboxJogo.setAlignment(Pos.CENTER);
 
-        getChildren().addAll(vbox);
+        //getChildren().addAll(vboxJogo);
 
-/*        // BOX DIREITA
+        // BOX DIREITA
 
         // BOX CENTRAL ENVOLVENTE CONTENDO A ESQUERDA E A DIREITA
-        HBox center = new HBox(10);
+/*        HBox center = new HBox(10);
         center.setBorder(new Border(new BorderStroke(Color.DARKGRAY, BorderStrokeStyle.SOLID,
                 null, new BorderWidths(2))));
         center.setAlignment(Pos.CENTER);
         center.getChildren().addAll(leftBox, rightBox);
-        setCenter(center);
+        setCenter(center);*/
 
         // PAINEIS DOS ESTADOS
-        AguardaInicioPane aguardaInicioPane = new AguardaInicioPane(jogoObservavel);
+        MenuInformativoPane menuInformativoPane = new MenuInformativoPane(jogoObservavel);
+        EscolheJogoPane escolheJogoPane = new EscolheJogoPane(jogoObservavel);
+/*        AguardaInicioPane aguardaInicioPane = new AguardaInicioPane(jogoObservavel);
         AguardaApostaPane aguardaApostaPane = new AguardaApostaPane(jogoObservavel);
         AguardaOpcaoPane aguardaOpcaoPane = new AguardaOpcaoPane(jogoObservavel);
         FinalJogoPane finalJogoPane = new FinalJogoPane(jogoObservavel);
@@ -91,9 +90,12 @@ public class PrincipalPane extends StackPane {
         bottom.setBorder(new Border(new BorderStroke(Color.DARKGRAY, BorderStrokeStyle.SOLID,
                 null, new BorderWidths(2))));
         bottom.setPrefSize(DIM_X_BOTTOM_PANEL, DIM_Y_BOTTOM_PANEL);
-        bottom.setMinSize(DIM_X_BOTTOM_PANEL, DIM_Y_BOTTOM_PANEL);
+        bottom.setMinSize(DIM_X_BOTTOM_PANEL, DIM_Y_BOTTOM_PANEL);*/
 
-        setBottom(bottom);*/
+        //setBottom(bottom);
+        getChildren().addAll(vboxJogo,
+                menuInformativoPane,
+                escolheJogoPane);
     }
 
     public void printMsgLog(){
@@ -104,7 +106,7 @@ public class PrincipalPane extends StackPane {
             s.append("\n");
 
             for(String msg:jogoObservavel.getMsgLog()){
-                s.append(msg + "\n");
+                s.append(msg).append("\n");
             }
 
             jogoObservavel.clearMsgLog();
@@ -116,12 +118,19 @@ public class PrincipalPane extends StackPane {
 
     private void atualiza() {
 
+        if(jogoObservavel.getSituacaoAtual() ==  Situacao.MENU_INFORMATIVO ||
+                jogoObservavel.getSituacaoAtual() ==  Situacao.ESCOLHE_JOGO) {
+            vboxJogo.setVisible(false);
+            return;
+        }
+        vboxJogo.setVisible(true);
+        printMsgLog();
         //int nb = jogoObservavel.getNBolasBrancasNoSaco();
         //int np = jogoObservavel.getNBolasPretasNoSaco();
 
         //vistaTabuleiro.
         //pontuacaoLabel.setText("Pontuacao: " + jogoObservavel.getPontuacao());
-
+        System.out.println("atualizaVista");
 
     }
 }

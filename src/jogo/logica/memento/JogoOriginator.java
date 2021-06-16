@@ -138,4 +138,12 @@ public class JogoOriginator {
     public int[][] getTabuleiro() {
         return jogoMaqEstados.getTabuleiro();
     }
+
+    public boolean temErros() {
+        return jogoMaqEstados.temErros();
+    }
+
+    public void setErros(boolean b) {
+        jogoMaqEstados.setErros(b);
+    }
 }

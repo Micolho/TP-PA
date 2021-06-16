@@ -71,6 +71,14 @@ public class JogoObservavel {
         propertyChangeSupport.firePropertyChange( PROPRIEDADE_JOGO, null, null);
     }
 
+    public boolean temErros(){
+        return jogoGestao.temErros();
+    }
+
+    public void setErros(boolean b) {
+        jogoGestao.setErros(b);
+    }
+
     public void afterFinish(){
         jogoGestao.afterFinish();
     }

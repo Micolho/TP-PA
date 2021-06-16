@@ -11,9 +11,7 @@ public class PrimeiroAJogar extends EstadoAdapter{
 
     @Override
     public IEstado random_jogador() {
-        getJogoDados().setTabuleiroZeros();
-        getJogoDados().randomJogador();
-        return new AguardaJogada(getJogoDados());
+        return this;
     }
 
     public Situacao getSituacaoAtual(){

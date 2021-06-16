@@ -163,10 +163,34 @@ public class Root extends VBox {
 
         ajudaMenu.getItems().addAll(Regras, Minijogos, PecaEspecial, new SeparatorMenuItem(), Creditos);
 
-        //acoes do menu ajuda
+        //acoes do menu regras
         Regras.setOnAction((ActionEvent e) -> {
             Alert dialogoResultado = new Alert(Alert.AlertType.INFORMATION);
             dialogoResultado.setHeaderText("Regras");
+            dialogoResultado.setContentText("bla bla bla");
+            dialogoResultado.showAndWait();
+        });
+
+        //acoes do menu Minijogos
+        Regras.setOnAction((ActionEvent e) -> {
+            Alert dialogoResultado = new Alert(Alert.AlertType.INFORMATION);
+            dialogoResultado.setHeaderText("Mini jogos");
+            dialogoResultado.setContentText("bla bla bla");
+            dialogoResultado.showAndWait();
+        });
+
+        //acoes do menu PecaEspecial
+        Regras.setOnAction((ActionEvent e) -> {
+            Alert dialogoResultado = new Alert(Alert.AlertType.INFORMATION);
+            dialogoResultado.setHeaderText("Peça Especial");
+            dialogoResultado.setContentText("bla bla bla");
+            dialogoResultado.showAndWait();
+        });
+
+        //acoes do menu Creditos
+        Regras.setOnAction((ActionEvent e) -> {
+            Alert dialogoResultado = new Alert(Alert.AlertType.INFORMATION);
+            dialogoResultado.setHeaderText("Creditos");
             dialogoResultado.setContentText("bla bla bla");
             dialogoResultado.showAndWait();
         });
@@ -175,19 +199,12 @@ public class Root extends VBox {
     }
 
     private void registarObservador(){
-        // regista um observador do jogoObservavel
         jogoObservavel.addPropertyChangeListener(PROPRIEDADE_JOGO,
-                new PropertyChangeListener() {
-                    @Override
-                    public void propertyChange(PropertyChangeEvent evt) {
-                        atualiza();
-                    }
-                }
+                evt -> atualiza()
         );
     }
 
     private void atualiza() {
-        principalPane.printMsgLog();
         //novoJogoMI.setDisable(!(jogoObservavel.getSituacaoAtual() ==  Situacao.AGUARDA_JOGADA_VIRTUAL));
     }
 }

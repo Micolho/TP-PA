@@ -5,10 +5,12 @@ import jogo.logica.dados.JogoDados;
 import jogo.logica.estados.IEstado;
 import jogo.logica.estados.MenuInformativo;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 
 public class JogoMaqEstados implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
     private JogoDados jogoDados;
     private IEstado estado;
@@ -112,4 +114,11 @@ public class JogoMaqEstados implements Serializable {
         return jogoDados.getTabuleiro();
     }
 
+    public boolean temErros() {
+        return jogoDados.temErros();
+    }
+
+    public void setErros(boolean b) {
+        jogoDados.setErros(b);
+    }
 }

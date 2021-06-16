@@ -19,7 +19,15 @@ public class JogoDados implements Serializable {
     static String nomeFich = ".\\ficheiros\\palavras.txt";
     static List<String> palavras = new ArrayList<>();
     private List<String> DecorrerMiniJogo = new ArrayList<>();
+    private boolean erros = false;
 
+    public boolean temErros() {
+        return erros;
+    }
+
+    public void setErros(boolean b){
+        erros = b;
+    }
 
     public JogoDados() throws Exception{
         setTabuleiroZeros();
@@ -43,12 +51,14 @@ public class JogoDados implements Serializable {
     }
 
     public boolean inicia(int tipo, String nome1, String nome2){
-        if (nome1.replace(" ","").equalsIgnoreCase(nome2.replace(" ",""))){
-            addMsgLog("O nome dos jogadores nao podem ser iguais!\n");
+        if (nome1.equals("") || nome2.equals("")){
+            erros = true;
+            addMsgLog("Os nomes dos jogadores nao podem ser vazios!\n");
             return false;
         }
-        if (nome1.equals("") || nome2.equals("")){
-            addMsgLog("Os nomes dos jogadores nao podem ser vazios!\n");
+        if (nome1.replace(" ","").equalsIgnoreCase(nome2.replace(" ",""))){
+            erros = true;
+            addMsgLog("O nome dos jogadores nao podem ser iguais!\n");
             return false;
         }
         setTipoJogo(tipo, nome1, nome2);
@@ -142,9 +152,7 @@ public class JogoDados implements Serializable {
     }
 
     public String printNextPlayer(){
-        StringBuilder s = new StringBuilder();
-        s.append("\n Vez do jogador ").append(nextPlayer.getNome()).append("!");
-        return s.toString();
+        return "\n Vez do jogador " + nextPlayer.getNome() + "!";
     }
 
     public boolean apos4jogadas() {

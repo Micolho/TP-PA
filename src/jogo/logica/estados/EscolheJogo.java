@@ -18,8 +18,9 @@ public class EscolheJogo extends EstadoAdapter{
 //        }
         if (!getJogoDados().inicia(tipo, nome1, nome2))
             return this;
-
-        return new PrimeiroAJogar(getJogoDados());
+        getJogoDados().setTabuleiroZeros();
+        getJogoDados().randomJogador();
+        return new AguardaJogada(getJogoDados());
     }
 
     public Situacao getSituacaoAtual(){

@@ -175,4 +175,12 @@ public class JogoGestao implements Serializable{
     public int[][] getTabuleiro() {
         return jogoOriginator.getTabuleiro();
     }
+
+    public boolean temErros() {
+        return jogoOriginator.temErros();
+    }
+
+    public void setErros(boolean b){
+        jogoOriginator.setErros(b);
+    }
 }

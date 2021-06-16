@@ -8,6 +8,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
 import jogo.logica.JogoObservavel;
+import jogo.logica.Situacao;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -89,8 +90,8 @@ public class VistaTabuleiro extends StackPane {
                         c.setFill(Color.RED);
                         c.setStroke(Color.DARKRED);
                     }else{
-                        c.setFill(Color.LIGHTYELLOW);
-                        c.setStroke(Color.YELLOW);
+                        c.setFill(Color.YELLOW);
+                        c.setStroke(Color.YELLOWGREEN);
                     }
                 }
                 c.setStrokeWidth(2f);
@@ -115,15 +116,9 @@ public class VistaTabuleiro extends StackPane {
                 rect.setOpacity(0.7);
 
             });
-            rect.setOnMouseExited(e -> {
-                rect.setFill(Color.TRANSPARENT);
-            });
+            rect.setOnMouseExited(e -> rect.setFill(Color.TRANSPARENT));
 
-            rect.setOnMouseClicked(e->{
-                //if()
-                System.out.println(gridOverlay.getColumnIndex(rect));// funciona bem
-                jogoObservavel.jogar_peca(gridOverlay.getColumnIndex(rect));
-            });
+            rect.setOnMouseClicked(e-> jogoObservavel.jogar_peca(gridOverlay.getColumnIndex(rect)));
 
             gridOverlay.add(rect,i,i, 1, nLinhas);
             listRect.add(rect);
@@ -131,19 +126,17 @@ public class VistaTabuleiro extends StackPane {
     }
 
     private void registarObservador(){
-        // regista um observador do jogoObservavel
         jogoObservavel.addPropertyChangeListener(PROPRIEDADE_JOGO,
-                new PropertyChangeListener() {
-                    @Override
-                    public void propertyChange(PropertyChangeEvent evt) {
-                        atualiza();
-                    }
-                }
+                evt -> atualiza()
         );
     }
 
     private void atualiza() {
-        System.out.println("atualizaVista");
+        if(jogoObservavel.getSituacaoAtual() ==  Situacao.MENU_INFORMATIVO ||
+            jogoObservavel.getSituacaoAtual() == Situacao.ESCOLHE_JOGO) {
+            return;
+        }
+
         this.getChildren().clear();
         setTabuleiro();
         setGridOverlay();
