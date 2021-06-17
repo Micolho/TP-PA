@@ -28,10 +28,6 @@ public abstract class EstadoAdapter implements IEstado {
         return this;
     }
     @Override
-    public IEstado random_jogador(){
-        return this;
-    }
-    @Override
     public IEstado aceita_minijogo(){
         return this;
     }
@@ -45,10 +41,6 @@ public abstract class EstadoAdapter implements IEstado {
     }
     @Override
     public IEstado joga_minijogo_palavras(String palavra){
-        return this;
-    }
-    @Override
-    public IEstado guarda_peca_especial(){
         return this;
     }
     @Override

@@ -1,6 +1,5 @@
 package jogo.logica.memento;
 
-import jogo.logica.JogoMaqEstados;
 import jogo.logica.dados.Jogador;
 
 import java.io.*;
@@ -34,6 +33,7 @@ public class CareTaker {
 
     public void undo(int n) {
         if (listHist.isEmpty()) {
+            jogoOriginator.setErros(true);
             jogoOriginator.addMsgLog("Sem jogadas anteriores, logo nao e possivel desfazer a jogada!");
             return;
         }
@@ -44,27 +44,24 @@ public class CareTaker {
         }
 
         if (listHist.size() < n) {
+            jogoOriginator.setErros(true);
             jogoOriginator.addMsgLog("O numero de jogadas a retroceder(" + n + ") nao possibilita retroceder pois so ha " + listHist.size() + " pra retroceder!");
             return;
         }
+        Jogador tmp = jogoOriginator.getPlayer();
 
-        if (!jogoOriginator.deduzCreditos(n)) {
+        if (!jogoOriginator.deduzCreditos(n, tmp)) {
+            jogoOriginator.setErros(true);
             jogoOriginator.addMsgLog("Numero de creditos nao possibilita retroceder, tem " + jogoOriginator.getCreditos() + " creditos.");
             return;
         }
 
-        Jogador tmp = jogoOriginator.getPlayer(); // saber o jogador que requesitou o voltar atras
-//        int listMaxSize = listHist.size();
-//        int aux = listHist.size() - n;
-
         Memento anterior = listHist.get(listHist.size() - n);
 
-//        for (; aux < listMaxSize;aux++){
-//            listHist.remove(listHist.size() - 1);
-//        }
         try {
             jogoOriginator.setMemento(anterior);
             jogoOriginator.resetUndo(tmp);
+            jogoOriginator.deduzCreditos(n,tmp);
         } catch (Exception e) {
             jogoOriginator.addMsgLog("Erro setMemento: " + e.getMessage());
         }
@@ -78,7 +75,7 @@ public class CareTaker {
         ObjectOutputStream out = null;
 
         try {
-            out = new ObjectOutputStream(new FileOutputStream(".\\ficheiros\\historico1.bin"));
+            out = new ObjectOutputStream(new FileOutputStream("./ficheiros/historico1.bin"));
             out.writeObject(listHist);
         } catch (IOException e) {
             jogoOriginator.addMsgLog("Erro GravaHist: " + e.getMessage());

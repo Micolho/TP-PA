@@ -32,16 +32,17 @@ public class JogoDados implements Serializable {
     public JogoDados() throws Exception{
         setTabuleiroZeros();
         miniJogo = null;
-//        try {
-//            if (!preencheArrayPalavras()) {
-//                throw new Exception("ficheiro nao tem 100 palavras com + de 5 letras cada");
-//            }
-//        }catch (IOException e){
-//            throw new Exception("erro ao ler do ficheiro!");
-//        }
+        try {
+            if (!preencheArrayPalavras()) {
+                throw new Exception("ficheiro nao tem 100 palavras com + de 5 letras cada");
+            }
+        }catch (IOException e){
+            throw new Exception("erro ao ler do ficheiro!");
+        }
     }
 
     public void setTabuleiroZeros(){
+        erros = false;
         //inicializacao do tabuleiro a zeros
         for(int i=0; i < nLinhas; i++){
             for(int j=0; j < nColunas; j++){
@@ -73,15 +74,15 @@ public class JogoDados implements Serializable {
         //addMsgLog("\nVai ser executada a escolhar do primeiro jogador: \n");
         //switch((Math.random() <= 0.5) ? 1 : 2){ //valores gerados sao 1 ou 2, ambos com chance de 50% pra ser justo
         if (((int) ( Math.random() * 2 + 1)) == 1) { //ganhou o sorteio
-            addMsgLog("O Jogador " + j1.getNome() + " ganhou o sorteio do primeiro a jogar!");
+            //setErros(true);
+            //addMsgLog("O Jogador " + j1.getNome() + " ganhou o sorteio do primeiro a jogar!");
             nextPlayer = j1;
         } else {
             nextPlayer = j2;
-            addMsgLog("O Jogador " + j2.getNome() + " ganhou o sorteio do primeiro a jogar!");
+            //setErros(true);
+            //addMsgLog("O Jogador " + j2.getNome() + " ganhou o sorteio do primeiro a jogar!");
 
         }
-        //addMsgLog("############## JOGADOR "+ nextPlayer.getNome()+" ###################");
-        //addMsgLog(this.toString());//imprimir o tabuleiro
     }
 
     public void setTipoJogo(int tipo, String nome1, String nome2) {
@@ -152,7 +153,7 @@ public class JogoDados implements Serializable {
     }
 
     public String printNextPlayer(){
-        return "\n Vez do jogador " + nextPlayer.getNome() + "!";
+        return "\n Vez do jogador " + nextPlayer.getNome() +"!";
     }
 
     public boolean apos4jogadas() {
@@ -210,6 +211,7 @@ public class JogoDados implements Serializable {
         }
 
         if(isHumano())
+            erros = true;
             addMsgLog("Coluna cheia!\n");
         return false;
     }
@@ -217,6 +219,7 @@ public class JogoDados implements Serializable {
     public boolean verificaVencedor(int jogadorVencedor){
 
         if(isTabuleiroCheio() && jogadorVencedor == 0){
+            erros = true;
             addMsgLog("Tabuleiro cheio e sem vencedores");
             //addMsgLog(this.toString());//imprimir o tabuleiro
             return true; //fim de jogo tabuleiro cheio sem vencedores
@@ -235,6 +238,7 @@ public class JogoDados implements Serializable {
             addMsgLog(j1.getNome() + " vencedor\n");
             //addMsgLog(this.toString());//imprimir o tabuleiro
         }
+        erros = true;
         return true;
     }
 
@@ -323,10 +327,6 @@ public class JogoDados implements Serializable {
         return miniJogo.miniGameDone(this);
     }
 
-    public void guardaPecaEspecial(){
-        addMsgLog("Peca especial guardada! Pode jogar a jogada normal:");
-    }
-
     public void jogaPecaEspecial(int x){
         for(int i = 0; i < nLinhas; i++){
           if(tabuleiro[i][x] !=0 ){
@@ -363,7 +363,7 @@ public class JogoDados implements Serializable {
     }
 
     public int randomPosPalavras(){
-        return (int)(Math.random() * palavras.size()-1);
+        return (int)(Math.random() * palavras.size());
     }
 
     public int joga_contas(int contaRes){
@@ -372,11 +372,13 @@ public class JogoDados implements Serializable {
 
         if(miniJogo.miniGameDone(this)){
             if(miniJogo.ganhou()) {
+                erros = true;
                 addMsgLog("Ganhou o minijogo!");
                 nextPlayer.setPecaEspecial(true);
                 nextPlayer.setJaJogouMiniJogo(true);
                 return 1; // return vitoria
             }
+            erros = true;
             addMsgLog("Perdeu o minijogo!");
             if (nextPlayer.getNome().equals(j1.getNome())){
                 j1.addJogada();
@@ -413,7 +415,7 @@ public class JogoDados implements Serializable {
         if ( nextPlayer.getPecaEspecial()){
             return true;
         }
-        addMsgLog("Nao possui uma peca especial!");
+        ///addMsgLog("Nao possui uma peca especial!");
         return false;
     }
 
@@ -462,8 +464,8 @@ public class JogoDados implements Serializable {
         }
     }
 
-    public boolean deduzCreditos(int n){
-        if(nextPlayer.getNome().equals(j1.getNome())){
+    public boolean deduzCreditos(int n, Jogador tmp){
+        if(tmp.getNome().equals(j1.getNome())){
             return j1.deductCredit(n);
         }else{
             return j2.deductCredit(n);

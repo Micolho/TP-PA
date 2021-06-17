@@ -48,10 +48,6 @@ public class JogoGestao implements Serializable{
         jogoOriginator.clearMsgLog();
     }
 
-    public void random_jogador(){
-        jogoOriginator.random_jogador();
-    }
-
     public void jogar_peca(int coluna){
         careTaker.gravaMemento();
         jogoOriginator.jogar_peca(coluna);
@@ -62,10 +58,12 @@ public class JogoGestao implements Serializable{
     }
 
     public void afterFinish(){
+        careTaker.gravaMemento();
         try {
             careTaker.gravaHist();
         }catch (IOException e){
             jogoOriginator.addMsgLog("Erro gravaHist: " + e.getMessage());
+            System.out.println(e.getMessage());
         }
         careTaker.clearHist();
     }
@@ -87,10 +85,6 @@ public class JogoGestao implements Serializable{
         jogoOriginator.joga_minijogo_palavras(palavra);
     }
 
-    public void guarda_peca_especial(){
-        jogoOriginator.guarda_peca_especial();
-    }
-
     public void joga_peca_especial(int coluna){
         careTaker.gravaMemento();
         jogoOriginator.joga_peca_especial(coluna);
@@ -104,7 +98,8 @@ public class JogoGestao implements Serializable{
         return jogoOriginator.getSituacaoAtual();
     }
 
-    public void leHist(String Filename){
+    public List<JogoMaqEstados> leHist(String Filename){
+        List<JogoMaqEstados> listMaq = new ArrayList<>();
         try {
             JogoMaqEstados tmp = null;
             ObjectInputStream ois = null;
@@ -115,15 +110,17 @@ public class JogoGestao implements Serializable{
 
             for (Memento memento : histFromFile) {
                 if (memento == null)
-                    return;
+                    return null;
                 ois = new ObjectInputStream(new ByteArrayInputStream(memento.getSnapshot()));
-                tmp = (JogoMaqEstados) ois.readObject();
-                jogoOriginator.addMsgLog(tmp + "\n");
+                listMaq.add((JogoMaqEstados) ois.readObject());
+
+                //jogoOriginator.addMsgLog(tmp + "\n");
             }
             ois.close();
         }catch(IOException | ClassNotFoundException e){
             jogoOriginator.addMsgLog("Erro leHist: " + e.getMessage());
         }
+        return listMaq;
     }
 
     public String fileInDirectory(){
@@ -151,11 +148,11 @@ public class JogoGestao implements Serializable{
         return s;
     }
 
-    public void saveToFile(String name){
+    public void saveToFile(File file){
         careTaker.gravaMemento();
         Memento obj =careTaker.getLastMemento();
 
-        if(saveAndLoad.saveToFile(name, obj)) {
+        if(saveAndLoad.saveToFile(file, obj)) {
             jogoOriginator.addMsgLog("Guardado com sucesso!");
             return;
         }
@@ -163,9 +160,9 @@ public class JogoGestao implements Serializable{
 
     }
 
-    public void loadFromFile(String name){
+    public void loadFromFile(File file){
         try{
-            Memento m = (Memento)saveAndLoad.loadFromFile(name);
+            Memento m = (Memento)saveAndLoad.loadFromFile(file);
             jogoOriginator.setMemento(m);
         } catch (Exception e) {
             jogoOriginator.addMsgLog("Erro ao carregar jogo!");
@@ -182,5 +179,13 @@ public class JogoGestao implements Serializable{
 
     public void setErros(boolean b){
         jogoOriginator.setErros(b);
+    }
+
+    public int getCreditos(){
+        return jogoOriginator.getCreditos();
+    }
+
+    public boolean jogadorTemPecaEspecial() {
+        return jogoOriginator.jogadorTemPecaEspecial();
     }
 }

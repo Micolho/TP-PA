@@ -5,10 +5,10 @@ import jogo.logica.memento.Memento;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.*;
-import java.util.ArrayList;
 import java.util.List;
 
 import static jogo.iu.gui.ConstantesGUI.PROPRIEDADE_JOGO;
+import static jogo.iu.gui.ConstantesGUI.PROPRIEDADE_REPLAY;
 
 public class JogoObservavel {
     private JogoGestao jogoGestao;
@@ -56,11 +56,6 @@ public class JogoObservavel {
         jogoGestao.clearMsgLog();
     }
 
-    public void random_jogador(){
-        jogoGestao.random_jogador();
-        propertyChangeSupport.firePropertyChange( PROPRIEDADE_JOGO, null, null);
-    }
-
     public void jogar_peca(int coluna){
         jogoGestao.jogar_peca(coluna);
         propertyChangeSupport.firePropertyChange( PROPRIEDADE_JOGO, null, null);
@@ -104,11 +99,6 @@ public class JogoObservavel {
         propertyChangeSupport.firePropertyChange( PROPRIEDADE_JOGO, null, null);
     }
 
-    public void guarda_peca_especial(){
-        jogoGestao.guarda_peca_especial();
-        propertyChangeSupport.firePropertyChange( PROPRIEDADE_JOGO, null, null);
-    }
-
     public void joga_peca_especial(int coluna){
         jogoGestao.joga_peca_especial(coluna);
         propertyChangeSupport.firePropertyChange( PROPRIEDADE_JOGO, null, null);
@@ -119,9 +109,13 @@ public class JogoObservavel {
 
     }
 
-    public void leHist(String Filename){
-        jogoGestao.leHist(Filename);
-        propertyChangeSupport.firePropertyChange( PROPRIEDADE_JOGO, null, null);
+    public List<JogoMaqEstados> leHist(String Filename){
+        propertyChangeSupport.firePropertyChange(PROPRIEDADE_REPLAY, null, null);
+        return jogoGestao.leHist(Filename);
+    }
+
+    public void nextPlay(){
+        propertyChangeSupport.firePropertyChange(PROPRIEDADE_REPLAY, null, null);
     }
 
     public String fileInDirectory(){
@@ -132,18 +126,25 @@ public class JogoObservavel {
         return jogoGestao.ListOfFileInDirectory();
     }
 
-
-
     //por alterar e corrigir
-    public void ler(File filename){
-        jogoGestao.loadFromFile(filename.toString());
+    public void ler(File file){
+        jogoGestao.loadFromFile(file);
+        propertyChangeSupport.firePropertyChange( PROPRIEDADE_JOGO, null, null);
     }
 
-    public void guardar(File filename){
-        jogoGestao.saveToFile(filename.toString());
+    public void guardar(File file){
+        jogoGestao.saveToFile(file);
     }
 
     public int[][] getTabuleiro() {
         return jogoGestao.getTabuleiro();
+    }
+
+    public int getCreditos(){
+        return jogoGestao.getCreditos();
+    }
+
+    public boolean jogadorTemPecaEspecial() {
+        return jogoGestao.jogadorTemPecaEspecial();
     }
 }

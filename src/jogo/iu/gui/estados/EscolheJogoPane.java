@@ -98,7 +98,7 @@ public class EscolheJogoPane extends BorderPane {
 
         //button
         btComecar = new Button("Começar Jogo");
-
+        btComecar.setFont(LETRA_RB);
         //borderPane
         setPrefSize(DIMX_PANE, DIMY_PANE);
         setPadding(new Insets(15));
@@ -141,7 +141,7 @@ public class EscolheJogoPane extends BorderPane {
 
     private void dialogError(){
         StringBuilder s = new StringBuilder();
-        Alert dialogErro = new Alert(Alert.AlertType.ERROR);
+        Alert dialogErro = new Alert(Alert.AlertType.WARNING);
         dialogErro.setHeaderText("Atenção!");
 
         if(jogoObservavel.getMsgLog().size()>0){

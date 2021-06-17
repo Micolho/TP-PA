@@ -97,8 +97,8 @@ public class IUTexto {
 
                 while(!s.hasNext()) s.next();
 
-                filename=s.next();
-                jogoGestao.loadFromFile(filename);
+                //filename=s.next();
+                //jogoGestao.loadFromFile(filename);
             }
             default -> System.out.println("Escolha uma opcao valida!");
         }
@@ -107,7 +107,7 @@ public class IUTexto {
     private void iuPrimeiroAJogar()
     {
         System.out.println("\nVai ser executada a escolha do primeiro jogador: \n");
-        jogoGestao.random_jogador();
+        //jogoGestao.random_jogador();
     }
 
     private void iuAguardaJogadaHumana() {
@@ -171,8 +171,8 @@ public class IUTexto {
 
                         while(!s.hasNext()) s.next();
 
-                        filename=s.next();
-                        jogoGestao.saveToFile(filename);
+                       // filename=s.next();
+                        //jogoGestao.saveToFile(filename);
                         jogoGestao.terminar();
                     }
                     case 2 -> {
@@ -265,7 +265,7 @@ public class IUTexto {
 
                 jogoGestao.joga_peca_especial(value);
             }
-            case 2 -> jogoGestao.guarda_peca_especial();
+            //case 2 -> jogoGestao.guarda_peca_especial();
             default -> System.out.println("Escolha uma opcao valida!");
         }
     }

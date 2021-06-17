@@ -2,6 +2,7 @@ package jogo.iu.gui;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -21,17 +22,12 @@ public class VistaTabuleiro extends StackPane {
     private JogoObservavel jogoObservavel;
     private GridPane gridTab;
     private GridPane gridOverlay;
+    private ToggleGroup group;
 
-    public VistaTabuleiro(JogoObservavel jogoObservavel){
+    public VistaTabuleiro(JogoObservavel jogoObservavel, ToggleGroup group){
         this.jogoObservavel = jogoObservavel;
+        this.group = group;
 
-        //a fazer
-        // meter como background uma imagem do "tabuleiro" do 4 em linha
-        // meter as fichas de uma cor e de outra
-        // grid para mostrar o jogo
-        // metodo para devolver o tabuleiro
-        //setTabuleiro();
-        //setGridOverlay();
         registarObservador();
         atualiza();
 }
@@ -118,7 +114,12 @@ public class VistaTabuleiro extends StackPane {
             });
             rect.setOnMouseExited(e -> rect.setFill(Color.TRANSPARENT));
 
-            rect.setOnMouseClicked(e-> jogoObservavel.jogar_peca(gridOverlay.getColumnIndex(rect)));
+            rect.setOnMouseClicked(e-> {
+                if((int) group.getSelectedToggle().getUserData() == 0)
+                    jogoObservavel.jogar_peca(gridOverlay.getColumnIndex(rect));
+                if((int) group.getSelectedToggle().getUserData() == 1)
+                    jogoObservavel.joga_peca_especial(gridOverlay.getColumnIndex(rect));
+            });
 
             gridOverlay.add(rect,i,i, 1, nLinhas);
             listRect.add(rect);

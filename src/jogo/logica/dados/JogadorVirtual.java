@@ -39,6 +39,7 @@ public class JogadorVirtual extends Jogador{
     public void joga(JogoDados jogoDados){
         boolean sair = false;
         int random;
+
         while(!sair) {
              random = (int) (Math.random() * 7);
              if(jogoDados.validaJogada(random)){

@@ -11,10 +11,8 @@ public class MiniJogoContas extends EstadoAdapter{
 
     public IEstado joga_minijogo_contas(int n){
         return switch (getJogoDados().joga_contas(n)) {
-            //ganhou minijogo
-            case 1 -> new DecisaoPecaEspecial(getJogoDados());
-            //perdeu minijogo
-            case 2 -> new AguardaJogada(getJogoDados());
+            //ganhou minijogo ou perdeu minijogo
+            case 1,2 -> new AguardaJogada(getJogoDados());
             // ainda nao acabou
             default -> this;
         };

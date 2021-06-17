@@ -34,10 +34,6 @@ public class JogoOriginator {
         jogoMaqEstados.clearMsgLog();
     }
 
-    public void random_jogador(){
-        jogoMaqEstados.random_jogador();
-    }
-
     public void jogar_peca(int coluna){
         jogoMaqEstados.jogar_peca(coluna);
     }
@@ -62,10 +58,6 @@ public class JogoOriginator {
         jogoMaqEstados.joga_minijogo_palavras(palavra);
     }
 
-    public void guarda_peca_especial(){
-        jogoMaqEstados.guarda_peca_especial();
-    }
-
     public void joga_peca_especial(int coluna){
         jogoMaqEstados.joga_peca_especial(coluna);
     }
@@ -79,8 +71,8 @@ public class JogoOriginator {
         return "\n" + jogoMaqEstados.toString();
     }
 
-    public boolean deduzCreditos(int n){
-        return jogoMaqEstados.deduzCreditos(n);
+    public boolean deduzCreditos(int n, Jogador tmp){
+        return jogoMaqEstados.deduzCreditos(n, tmp);
     }
 
     public void resetUndo(Jogador tmp){
@@ -145,5 +137,9 @@ public class JogoOriginator {
 
     public void setErros(boolean b) {
         jogoMaqEstados.setErros(b);
+    }
+
+    public boolean jogadorTemPecaEspecial() {
+        return jogoMaqEstados.jogadorTemPecaEspecial();
     }
 }

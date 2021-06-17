@@ -48,10 +48,6 @@ public class JogoMaqEstados implements Serializable {
         jogoDados.clearMsgLog();
     }
 
-    public void random_jogador(){
-        estado = estado.random_jogador();
-    }
-
     public void jogar_peca(int coluna){
         estado = estado.jogar_peca(coluna);
     }
@@ -82,16 +78,12 @@ public class JogoMaqEstados implements Serializable {
         estado = estado.joga_minijogo_palavras(n);
     }
 
-    public void guarda_peca_especial(){
-        estado = estado.guarda_peca_especial();
-    }
-
     public void joga_peca_especial(int coluna){
         estado = estado.joga_peca_especial(coluna);
     }
 
-    public boolean deduzCreditos(int n){
-        return jogoDados.deduzCreditos(n);
+    public boolean deduzCreditos(int n, Jogador tmp){
+        return jogoDados.deduzCreditos(n, tmp);
     }
 
     public void resetUndo(Jogador jogador){
@@ -120,5 +112,9 @@ public class JogoMaqEstados implements Serializable {
 
     public void setErros(boolean b) {
         jogoDados.setErros(b);
+    }
+
+    public boolean jogadorTemPecaEspecial() {
+        return jogoDados.jogadorTemPecaEspecial();
     }
 }

@@ -1,6 +1,7 @@
 package jogo.iu.gui;
 
 import javafx.event.ActionEvent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
@@ -9,21 +10,21 @@ import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+
 import jogo.logica.JogoObservavel;
 import jogo.logica.Situacao;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import static jogo.iu.gui.ConstantesGUI.PROPRIEDADE_JOGO;
+import static jogo.iu.gui.ConstantesGUI.*;
 
 public class Root extends VBox {
     private JogoObservavel jogoObservavel;
     private MenuItem novoJogoMI;
     private PrincipalPane principalPane;
+    private MenuItem gravarObj;
 
     public Root(JogoObservavel jogoObservavel){
         this.jogoObservavel = jogoObservavel;
@@ -56,7 +57,7 @@ public class Root extends VBox {
         MenuItem lerObjMI = new MenuItem("Carregar Jogo");
         lerObjMI.setAccelerator(new KeyCodeCombination(KeyCode.C, KeyCombination.CONTROL_DOWN));
 
-        MenuItem gravarObj = new MenuItem("Gravar Jogo");
+        gravarObj = new MenuItem("Gravar Jogo");
         gravarObj.setAccelerator(new KeyCodeCombination(KeyCode.G, KeyCombination.CONTROL_DOWN));
 
         MenuItem sairMI = new MenuItem("Sair");
@@ -64,28 +65,29 @@ public class Root extends VBox {
 
         jogoMenu.getItems().addAll(novoJogoMI, lerObjMI, gravarObj, new SeparatorMenuItem(), sairMI);
 
+        //
+
+
         //Accoes do Jogo
-        novoJogoMI.setOnAction((e)-> jogoObservavel.terminar());
+        novoJogoMI.setOnAction((e)-> {
+            jogoObservavel.opcoesjogo();
+        });
 
         lerObjMI.setOnAction((ActionEvent e) -> {
             FileChooser fileChooser = new FileChooser();
-            fileChooser.setInitialDirectory(new File("./"));
+            fileChooser.setInitialDirectory(new File("./ficheiros/saves"));
             File selectedFile = fileChooser.showOpenDialog(null);
             if(selectedFile != null){
                 jogoObservavel.ler(selectedFile);
-            }else{
-                System.err.println("Leitura Cancelada!");
             }
         });
 
         gravarObj.setOnAction((ActionEvent e) ->{
             FileChooser fileChooser = new FileChooser();
-            fileChooser.setInitialDirectory(new File("./"));
+            fileChooser.setInitialDirectory(new File("./ficheiros/saves"));
             File selectedFile = fileChooser.showSaveDialog(null);
             if(selectedFile != null){
                 jogoObservavel.guardar(selectedFile);
-            }else{
-                System.err.println("Gravacao Cancelada!");
             }
         });
 
@@ -95,24 +97,25 @@ public class Root extends VBox {
             ButtonType sim = new ButtonType("Sim");
             ButtonType nao = new ButtonType("Nao");
 
+            if(jogoObservavel.getSituacaoAtual() != Situacao.ESCOLHE_JOGO
+                    && jogoObservavel.getSituacaoAtual() != Situacao.MENU_INFORMATIVO){
+                Alert dialogoResultado = new Alert(Alert.AlertType.NONE, "Promote",sim, nao);
+                dialogoResultado.setHeaderText("Gravar");
+                dialogoResultado.setContentText("Deseja gravar antes de sair?");
+                dialogoResultado.showAndWait().ifPresent(response -> {
+                    if (response == sim) {
+                        //codigo para abrir o explorador e gravar em fich
+                        FileChooser fileChooser = new FileChooser();
+                        fileChooser.setInitialDirectory(new File("./"));
+                        File selectedFile = fileChooser.showSaveDialog(null);
+                        if(selectedFile != null){
+                            jogoObservavel.guardar(selectedFile);
+                        }
 
-            Alert dialogoResultado = new Alert(Alert.AlertType.NONE, "Promote",sim, nao);
-            dialogoResultado.setHeaderText("Gravar");
-            dialogoResultado.setContentText("Deseja gravar antes de sair?");
-            dialogoResultado.showAndWait().ifPresent(response -> {
-                if (response == sim) {
-                    //codigo para abrir o explorador e gravar em fich
-                    FileChooser fileChooser = new FileChooser();
-                    fileChooser.setInitialDirectory(new File("./"));
-                    File selectedFile = fileChooser.showSaveDialog(null);
-                    if(selectedFile != null){
-                        jogoObservavel.guardar(selectedFile);
-                    }else{
-                        System.err.println("Gravacao Cancelada!");
                     }
-
-                }
-            });
+                });
+            }
+            jogoObservavel.terminar();
             fireEvent(new WindowEvent(janela2, WindowEvent.WINDOW_CLOSE_REQUEST));
         });
 
@@ -131,11 +134,20 @@ public class Root extends VBox {
             hist.add(new MenuItem(nameWithoutBin));
 
             hist.get(tmp.indexOf(f)).setOnAction((ActionEvent e) -> {
-                //Replay do jogo, por agora improvisado
-                System.out.println("hist.get(tmp.indexOf(f)).setOnAction() ---> " + f);
-                jogoObservavel.leHist(f);
-                for (String s: jogoObservavel.getMsgLog()){
-                    System.out.println(s);
+
+
+                ReplayPane rp = new ReplayPane(jogoObservavel, f);
+
+                Scene replay = new Scene(rp, 600, 600);
+                Stage replayWindow = new Stage();
+                replayWindow.setTitle("Replay");
+                replayWindow.setScene(replay);
+                //replayWindow.setResizable(false);
+                replayWindow.show();
+
+                if(jogoObservavel.temErros()){
+                    dialogError();
+                    jogoObservavel.setErros(false);
                 }
             });
         }
@@ -143,6 +155,27 @@ public class Root extends VBox {
         historicoMenu.getItems().addAll(hist);
 
         return historicoMenu;
+    }
+
+    //private void printList
+
+    private void dialogError(){
+        StringBuilder s = new StringBuilder();
+        Alert dialogErro = new Alert(Alert.AlertType.WARNING);
+        dialogErro.setHeaderText("Atenção!");
+
+        if(jogoObservavel.getMsgLog().size()>0){
+
+            s.append("\n");
+
+            for(String msg:jogoObservavel.getMsgLog()){
+                s.append(msg).append("\n");
+            }
+
+            jogoObservavel.clearMsgLog();
+        }
+        dialogErro.setContentText(s.toString());
+        dialogErro.showAndWait();
     }
 
     private Menu menuAjuda(){
@@ -158,40 +191,42 @@ public class Root extends VBox {
         MenuItem PecaEspecial = new MenuItem("Peca Especial");
         PecaEspecial.setAccelerator(new KeyCodeCombination(KeyCode.P, KeyCombination.CONTROL_DOWN));
 
-        MenuItem Creditos = new MenuItem("Creditos");
-        Creditos.setAccelerator(new KeyCodeCombination(KeyCode.C, KeyCombination.CONTROL_DOWN));
-
-        ajudaMenu.getItems().addAll(Regras, Minijogos, PecaEspecial, new SeparatorMenuItem(), Creditos);
+        ajudaMenu.getItems().addAll(Regras, Minijogos, PecaEspecial);
 
         //acoes do menu regras
         Regras.setOnAction((ActionEvent e) -> {
             Alert dialogoResultado = new Alert(Alert.AlertType.INFORMATION);
+            dialogoResultado.setTitle("Regras");
             dialogoResultado.setHeaderText("Regras");
-            dialogoResultado.setContentText("bla bla bla");
+            dialogoResultado.setContentText("""
+                    Apenas se pode jogar 1 peça por jogada.\n
+                    O primeiro jogador a começar é selecionado de forma aleatória.\n
+                    A cada 4 jogadas, o jogador tem a opcao de aceitar participar num mini jogo para obter uma peça especial caso ganhe.\n
+                    Cada jogador Humano, tem 5 creditos que pode usar para desfazer jogadas(ate 5)\n
+                    """);
             dialogoResultado.showAndWait();
         });
 
         //acoes do menu Minijogos
-        Regras.setOnAction((ActionEvent e) -> {
+        Minijogos.setOnAction((ActionEvent e) -> {
             Alert dialogoResultado = new Alert(Alert.AlertType.INFORMATION);
+            dialogoResultado.setTitle("Mini jogos");
             dialogoResultado.setHeaderText("Mini jogos");
-            dialogoResultado.setContentText("bla bla bla");
+            dialogoResultado.setContentText("""
+                    Contas:\n
+                    Introduza apenas o valor das operacoes aritmeticas. Em caso de divisao, arredondar para o inteiro abaixo.\n
+                    Palavras:\n
+                    Escreva a sequencia de palavras seguidas de acordo como aparecem no ecra, com os mesmos espacos em branco!\n
+                    """);
             dialogoResultado.showAndWait();
         });
 
         //acoes do menu PecaEspecial
-        Regras.setOnAction((ActionEvent e) -> {
+        PecaEspecial.setOnAction((ActionEvent e) -> {
             Alert dialogoResultado = new Alert(Alert.AlertType.INFORMATION);
+            dialogoResultado.setTitle("Peça Especial");
             dialogoResultado.setHeaderText("Peça Especial");
-            dialogoResultado.setContentText("bla bla bla");
-            dialogoResultado.showAndWait();
-        });
-
-        //acoes do menu Creditos
-        Regras.setOnAction((ActionEvent e) -> {
-            Alert dialogoResultado = new Alert(Alert.AlertType.INFORMATION);
-            dialogoResultado.setHeaderText("Creditos");
-            dialogoResultado.setContentText("bla bla bla");
+            dialogoResultado.setContentText("Ao usar, pode apagar uma coluna de jogadas.");
             dialogoResultado.showAndWait();
         });
 
@@ -205,6 +240,9 @@ public class Root extends VBox {
     }
 
     private void atualiza() {
-        //novoJogoMI.setDisable(!(jogoObservavel.getSituacaoAtual() ==  Situacao.AGUARDA_JOGADA_VIRTUAL));
+        System.out.println(jogoObservavel.getSituacaoAtual().toString());
+        gravarObj.setDisable(jogoObservavel.getSituacaoAtual() ==  Situacao.MENU_INFORMATIVO ||
+                jogoObservavel.getSituacaoAtual() ==  Situacao.FIM_JOGO ||
+                jogoObservavel.getSituacaoAtual() ==  Situacao.ESCOLHE_JOGO);
     }
 }

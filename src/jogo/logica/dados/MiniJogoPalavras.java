@@ -10,6 +10,7 @@ public class MiniJogoPalavras extends MiniJogo {
         public MiniJogoPalavras(String p1, String p2, String p3, String p4, String p5, JogoDados jogoDados){
             elapsedTimeSec = 0;
             palavras = p1 + " " + p2 + " " + p3 + " " + p4 + " " + p5;
+            jogoDados.setErros(true);
             jogoDados.addMsgLog("Digite as seguintes palavras corretamente(inclui os espacos)!");
             jogaMinijogo(jogoDados);
             initTime = System.currentTimeMillis();
@@ -21,6 +22,7 @@ public class MiniJogoPalavras extends MiniJogo {
 
     public boolean verificaResultado(String palavra, JogoDados jogoDados){
         elapsedTime = (System.currentTimeMillis() - initTime) / 1000F;
+        jogoDados.setErros(true);
         if(palavras.equals(palavra)){
             jogoDados.addMsgLog("Palavras digitadas corretamente");
             if(elapsedTime <= (float)(palavras.length()/2)){

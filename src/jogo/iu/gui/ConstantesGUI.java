@@ -9,6 +9,7 @@ import java.io.Serializable;
 public class ConstantesGUI implements Serializable {
     private ConstantesGUI(){}
     public static String PROPRIEDADE_JOGO = "jogo";
+    public static String PROPRIEDADE_REPLAY = "replay";
     public final static int nLinhas = 6;
     public final static int nColunas = 7;
     public final static int maxTabSize = 300;

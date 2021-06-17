@@ -6,7 +6,7 @@ import java.util.Arrays;
 
 public class SaveAndLoad {
 
-        private static final String path_save= ".\\ficheiros\\saves\\";
+        private static final String path_save= "";
 
         private ArrayList<File> savesArray;
         private  File f;
@@ -18,24 +18,13 @@ public class SaveAndLoad {
 
         }
 
-        public  boolean saveToFile(String filename, Object obj){ // recebe nome do ficheiro e o objeto (jogo gestao)
+        public  boolean saveToFile(File file, Object obj){ // recebe nome do ficheiro e o objeto (jogo gestao)
+
 
             ObjectOutputStream oos = null;
 
-            savesArray.clear();
-            savesArray.addAll(Arrays.asList(f.listFiles()));// buscar os ficheiros dentro da diretoria path_save para o savesArray
-
-            File aux = null;
-
-            for (File s : savesArray) {
-                if (s.getName().equals(filename))
-                    aux = s;/// pesquisar pra saber se ha outro fich com o mesmo nome
-            }
-            if(aux != null)
-                return false;
-
             try {
-                oos = new ObjectOutputStream(new FileOutputStream(path_save +filename));
+                oos = new ObjectOutputStream(new FileOutputStream(path_save + file));
                 oos.writeObject(obj);
 
             } catch (IOException e) {
@@ -53,26 +42,14 @@ public class SaveAndLoad {
         }
 
 
-        public  Object loadFromFile(String filename){ // recebe nome do ficheiro e o objeto (jogo gestao)
+        public  Object loadFromFile(File file){ // recebe nome do ficheiro e o objeto (jogo gestao)
 
 
             ObjectInputStream in = null;
             Object obj = null;
 
-            savesArray.clear();
-            savesArray.addAll(Arrays.asList(f.listFiles()));
-
-            File aux = null;
-
-            for (File s : savesArray) {
-                if (s.getName().equals(filename))
-                    aux = s;//pesquisar pra saber se fich existe
-            }
-
-            if (aux == null)
-                return null;
             try {
-                in = new ObjectInputStream(new FileInputStream(aux));
+                in = new ObjectInputStream(new FileInputStream(file));
                 obj = in.readObject();
                 if (in != null)
                     in.close();

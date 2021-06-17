@@ -24,7 +24,7 @@ public class Mainjfx extends Application {
         Root Root = new Root(jogoObservavel);
         Scene scene = new Scene(Root, DIMX_SCENE, DIMY_SCENE);
 
-        primaryStage.setResizable(true);
+        primaryStage.setResizable(false);
 
         Image img = ImageLoader.getImage(ICON_SCENE);
         if (img != null) {
