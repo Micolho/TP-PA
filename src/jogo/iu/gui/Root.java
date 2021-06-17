@@ -1,5 +1,6 @@
 package jogo.iu.gui;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -140,7 +141,8 @@ public class Root extends VBox {
                 Stage replayWindow = new Stage();
                 replayWindow.setTitle("Replay");
                 replayWindow.setScene(replay);
-                //replayWindow.setResizable(false);
+                replayWindow.setResizable(false);
+                replayWindow.setOnCloseRequest(windowEvent -> replayWindow.close());
                 replayWindow.show();
 
                 if(jogoObservavel.temErros()){

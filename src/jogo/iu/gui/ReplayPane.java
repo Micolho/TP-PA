@@ -21,12 +21,13 @@ public class ReplayPane extends VBox {
     private Button next;
     private int tam;
     private List<JogoMaqEstados> listMaq;
-    private int nJogadasReplay = 0;
+    private int nJogadasReplay;
 
     public ReplayPane(JogoObservavel jogoObservavel, String file) {
         this.jogoObservavel = jogoObservavel;
         listMaq = jogoObservavel.leHist(file);
         this.tam = listMaq.size();
+        nJogadasReplay = 0;
         registarObservador();
         setTabuleiro();
         criaVista();
@@ -49,9 +50,8 @@ public class ReplayPane extends VBox {
             next.setDisable(true);
             return;
         }
-        if (nJogadasReplay == tam-1) {
+        if (nJogadasReplay >= tam) {
             next.setDisable(true);
-            desenhaTabuleiro(nJogadasReplay++);
             return;
         }
         this.getChildren().clear();
