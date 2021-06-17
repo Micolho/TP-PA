@@ -1,7 +1,5 @@
 package jogo.logica;
 
-import jogo.logica.memento.Memento;
-
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.*;

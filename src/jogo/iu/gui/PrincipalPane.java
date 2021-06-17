@@ -2,11 +2,9 @@ package jogo.iu.gui;
 
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.stage.Stage;
 import jogo.iu.gui.estados.*;
 import jogo.logica.JogoObservavel;
 
-import java.util.Timer;
 
 import static jogo.iu.gui.ConstantesGUI.PROPRIEDADE_JOGO;
 

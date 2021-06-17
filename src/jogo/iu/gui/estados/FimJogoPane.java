@@ -4,7 +4,6 @@ import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
-import javafx.stage.Stage;
 import jogo.logica.JogoObservavel;
 import jogo.logica.Situacao;
 
@@ -61,6 +60,7 @@ public class FimJogoPane {
             //jogoObservavel.afterFinish();
             dialog.setContentText(s.toString());
             Optional<ButtonType> result = dialog.showAndWait();
+            //noinspection OptionalGetWithoutIsPresent
             if(result.get() == yes){
                 jogoObservavel.setErros(false);
                 jogoObservavel.opcoesjogo();

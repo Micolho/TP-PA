@@ -69,9 +69,7 @@ public class Root extends VBox {
 
 
         //Accoes do Jogo
-        novoJogoMI.setOnAction((e)-> {
-            jogoObservavel.opcoesjogo();
-        });
+        novoJogoMI.setOnAction((e)-> jogoObservavel.opcoesjogo());
 
         lerObjMI.setOnAction((ActionEvent e) -> {
             FileChooser fileChooser = new FileChooser();
@@ -199,10 +197,10 @@ public class Root extends VBox {
             dialogoResultado.setTitle("Regras");
             dialogoResultado.setHeaderText("Regras");
             dialogoResultado.setContentText("""
-                    Apenas se pode jogar 1 peça por jogada.\n
-                    O primeiro jogador a começar é selecionado de forma aleatória.\n
-                    A cada 4 jogadas, o jogador tem a opcao de aceitar participar num mini jogo para obter uma peça especial caso ganhe.\n
-                    Cada jogador Humano, tem 5 creditos que pode usar para desfazer jogadas(ate 5)\n
+                    Apenas se pode jogar 1 peça por jogada.
+                    O primeiro jogador a começar é selecionado de forma aleatória.
+                    A cada 4 jogadas, o jogador tem a opcao de aceitar participar num mini jogo para obter uma peça especial caso ganhe.
+                    Cada jogador Humano, tem 5 creditos que pode usar para desfazer jogadas(ate 5)
                     """);
             dialogoResultado.showAndWait();
         });
@@ -213,10 +211,10 @@ public class Root extends VBox {
             dialogoResultado.setTitle("Mini jogos");
             dialogoResultado.setHeaderText("Mini jogos");
             dialogoResultado.setContentText("""
-                    Contas:\n
-                    Introduza apenas o valor das operacoes aritmeticas. Em caso de divisao, arredondar para o inteiro abaixo.\n
-                    Palavras:\n
-                    Escreva a sequencia de palavras seguidas de acordo como aparecem no ecra, com os mesmos espacos em branco!\n
+                    Contas:
+                    Introduza apenas o valor das operacoes aritmeticas. Em caso de divisao, arredondar para o inteiro abaixo.
+                    Palavras:
+                    Escreva a sequencia de palavras seguidas de acordo como aparecem no ecra, com os mesmos espacos em branco!
                     """);
             dialogoResultado.showAndWait();
         });

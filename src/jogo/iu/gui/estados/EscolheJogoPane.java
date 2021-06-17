@@ -1,7 +1,6 @@
 package jogo.iu.gui.estados;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -9,11 +8,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 
-import javafx.scene.paint.Color;
 import jogo.iu.gui.resources.ImageLoader;
 import jogo.logica.JogoObservavel;
 import jogo.logica.Situacao;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,8 +72,6 @@ public class EscolheJogoPane extends BorderPane {
         hboxGroupImage.getChildren().addAll(vboxRadio, iconSelected);
         hboxGroupImage.setAlignment(Pos.CENTER);
         hboxGroupImage.setPrefSize(HBOX_GROUP_IMG_SIZE,HBOX_GROUP_IMG_SIZE);
-        //hboxGroupImage.setBorder(new Border(new BorderStroke(Color.DARKGRAY, BorderStrokeStyle.SOLID,
-        //        null, new BorderWidths(2))));
 
         Label j1 = new Label("Nome 1º jogador:");
         inputJ1 = new TextField();

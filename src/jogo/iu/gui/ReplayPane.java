@@ -1,28 +1,19 @@
 package jogo.iu.gui;
 
-import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
-import javafx.stage.Stage;
 import jogo.logica.JogoMaqEstados;
 import jogo.logica.JogoObservavel;
-import jogo.logica.Situacao;
 
 
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import static jogo.iu.gui.ConstantesGUI.*;
-import static jogo.iu.gui.ConstantesGUI.PROPRIEDADE_JOGO;
 
 public class ReplayPane extends VBox {
     private GridPane gridTab;
@@ -92,9 +83,7 @@ public class ReplayPane extends VBox {
     }
 
     private void nextListener(){
-        next.setOnMouseClicked(e-> {
-            jogoObservavel.nextPlay();
-        });
+        next.setOnMouseClicked(e-> jogoObservavel.nextPlay());
     }
 
     private void desenhaTabuleiro ( int indice){

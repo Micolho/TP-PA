@@ -30,11 +30,6 @@ public class JogadorVirtual extends Jogador{
     }
     public void setPecaEspecial(boolean peca){
     }
-    public String getLastMiniGame(){
-        return null;
-    }
-    public void setLastMiniGame(String minigame) {
-    }
 
     public void joga(JogoDados jogoDados){
         boolean sair = false;
